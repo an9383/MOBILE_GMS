@@ -1,0 +1,547 @@
+﻿
+@{
+    ViewData["Title"] = "PackSelect";
+    Layout = "~/Views/Shared/_GmsLayout.cshtml";
+}
+
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/animate/animate.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/util.css">
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/main.css">
+<!--===============================================================================================-->
+
+<environment names="Development">
+    <link rel="stylesheet" href="~/css/gms_01.css" />
+    <script src="~/Content/Login_v2/vendor/jquery/jquery-3.2.1.min.js"></script>
+</environment>
+
+<style>
+    th, td {
+        text-align: center;
+    }
+</style>
+
+<div class="content">
+    <div class="container-fluid padding-rl-del">
+        <div class="row margin-rl-del">
+
+            <div class="col-md-12 padding-rl-del">
+                <div class="card margin-bottom-0">
+
+                    <div class="card-header">
+                        <h4 class="card-title" id="div_title">
+                            팩/지함 정보 조회
+
+                        </h4>
+                    </div>
+                    <div class="card-content">
+                        <!--
+    <fieldset>
+        <legend style="font-size: 18px" id="div_title">팩 정보 조회</legend>
+    </fieldset>
+        -->
+                        <fieldset>
+                            <div class="form-group has-success">
+
+                                <input type="hidden" name="controllerName" id="controllerName" value="PackSelect" />
+                                <input type="hidden" name="actionName" id="actionName" value="SelectPack" />
+
+                                <!-- 페이징 처리 필요 변수 -->
+                                <input type="hidden" id="list_count" name="list_count" />
+                                <input type="hidden" id="current_page" name="current_page" />
+                                <input type="hidden" id="page_limit" name="page_limit" />
+                                <input type="hidden" id="max_page" name="max_page" />
+                                <input type="hidden" id="start_page" name="start_page" />
+                                <input type="hidden" id="end_page" name="end_page" />
+                                <input type="hidden" id="board_limit" name="board_limit" />
+
+                                <!-- 적치 바코드 -->
+                                <input type="hidden" name="init_barcode" id="init_barcode" value="@ViewData["barcode"]" />
+
+                                <form class="form-horizontal" name="myForm" id="myForm">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">바코드</label>
+
+                                        <div class="col-sm-9" id="mobile_object" style="display:none">
+
+                                            <input type="text" id="barcode_val" name="mobile_object" class="input-css" readonly="readonly" />
+
+                                        </div>
+                                        <div class="col-sm-9" id="pc_object" style="display:none">
+
+                                            <input type="text" id="barcode_val" name="pc_object" class="input-css" onkeydown="onKeyDown();" onfocus="setBarcodeInit()" />
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">코드</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="item_cd" name="item_cd" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">품목명</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="item_nm" name="item_nm" class="input-css" readonly="readonly" />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">시험번호</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="test_no" name="test_no" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">입고상태</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="receipt_status_nm" name="receipt_status_nm" class="input-css" readonly="readonly" />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">위치</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="workroom_cd" name="workroom_cd" class="input-css" readonly="readonly" />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">재고량</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="receipt_pack_remain_qty" name="receipt_pack_remain_qty" class="input-css" readonly="readonly" />
+                                        </div>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="form-group has-success">
+                                <hr />
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="table-responsive table-full-width max-h-315 h-50">
+                                <table id="packList" class="table table-hover w-s-nr">
+                                    <thead style="background: #4EAE51; color: white;">
+                                    <th>구분</th>
+                                    <th>수량</th>
+                                    <th>일자</th>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </fieldset>
+
+                        <fieldset style="text-align: center">
+                            <ul class="pagination">
+
+                            </ul>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="form-group has-success">
+
+                                <div class="col-sm-12">
+                                    <hr />
+                                    <button id="btn_stack" type="button" class="btn btn-default btn-lg" disabled="disabled" onclick="javascript:fn_stackPack()">적 치</button>
+                                    <button id="btn_pick" type="button" class="btn btn-default btn-lg pull-right" disabled="disabled" onclick="javascript:fn_pickPack()">피 킹</button>
+
+                                </div>
+                            </div>
+                        </fieldset>
+
+                    </div>
+                </div>  <!-- end card -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+</div>
+
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/popper.js"></script>
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/js/main.js"></script>
+
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        // 모바일 기기 체크
+        fn_moblieCK();
+
+        if ($('#init_barcode').val() != '') {
+            var params = { 'barcode': $('#init_barcode').val() };
+
+            fn_callBarcodeInfo(params);
+        }
+
+
+        if (screen.height > 640) {
+            $("#packList").parent().removeClass("max-h-315");
+            $("#packList").parent().addClass("max-h-650");
+        }
+
+        // 테이블 resize 핸들러
+        resize_table();
+
+        var checkWeb = fn_mobile_ckeck();
+        if (checkWeb == "web") {
+            $("div.table-responsive.table-full-width").css("overflow-x", "auto");
+            resize_Web_table("packList", 650);
+        }
+    });
+
+    // 바코드 초기화 (웹 환경에서 사용됨)
+    function setBarcodeInit() {
+
+        $('#barcode_val').val('');
+
+    }
+
+    // 엔터키 동작 (웹 환경에서 사용됨)
+    function onKeyDown() {
+
+        // 엔터키 코드
+        if (event.keyCode == 13) {
+
+            var barcode = $("#barcode_val").val();
+
+            // 포커스 해제
+            $("#barcode_val").blur();
+
+            fn_callBarcodeInfo({ 'barcode': barcode.replaceAll("\0", "") });
+
+        }
+
+    }
+
+    /*
+     * 바코드관련 상세 정보 호출
+     */
+    function fn_callBarcodeInfo(params) {
+
+        // 특수문자 제거
+        if (typeof params.barcode == "undefined" || params.barcode == null || params.barcode == "" || params.barcode == "null") {
+
+            params.barcode = params.barcode.replaceAll("\0", "");
+        }
+
+        // 테이블 초기화
+        $('#packList > tbody').empty();
+        // 폼 초기화
+        $("#myForm").find('input[type="text"], textarea, select').val('');
+        $("#myForm").find('input[type="checkbox"]').prop('checked', false);
+
+        // 스캔한 바코드 셋팅
+        $("#barcode_val").val(params.barcode);
+
+        // 스캔한 바코드 분기처리
+        var barcode_gubun = fn_getBarcodePrefix(params.barcode);
+
+        // Cell 바코드
+        if (barcode_gubun === 'C') {
+            // 팩 바코드가 미입력(스캔) 상태
+            if ($('#init_barcode').val() === '') {
+                controllerName = 'CellSelect';
+                actionName = 'Index';
+
+                fn_locationByGet(controllerName, actionName, params);
+                return;
+            } else {
+                fn_stackPack();
+                return;
+            }
+
+        } else if (barcode_gubun === 'Z') {
+            if ($('#init_barcode').val() === '') {
+                controllerName = 'ZoneSelect';
+                actionName = 'Index';
+
+                fn_locationByGet(controllerName, actionName, params);
+                return;
+            } else {
+                fn_stackPack();
+                return;
+            }
+
+        } else if (barcode_gubun === 'W') {
+            if ($('#init_barcode').val() === '') {
+                controllerName = 'WorkRoomSelect';
+                actionName = 'Index';
+
+                fn_locationByGet(controllerName, actionName, params);
+                return;
+            } else {
+                fn_stackPack();
+                return;
+            }
+        }
+
+        // 제목 변경
+        if (barcode_gubun == 'P') {
+            $("#div_title").text('팩 정보 조회');
+        } else if (barcode_gubun == 'G') {
+            $("#div_title").text('지함 정보 조회');
+        }
+
+        var controllerName = $("#controllerName").val();
+        var actionName = $("#actionName").val();
+        //var barcode = params.barcode;
+
+        var callUrl = "/" + controllerName + "/" + actionName;
+
+        var request = JSON.stringify(params);
+
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                if (typeof data.item_cd == "undefined" || data.item_cd == null || data.item_cd == "" || data.item_cd == "null") {
+
+                    swal({
+                        title: '바코드 정보가 없습니다.',
+                        //text: '적치할 위치의 바코드정보를 스캔해주세요.',
+                        type: 'error'
+                        //timer: 1000
+                    });
+
+                    return;
+
+                } else {
+                    $("#item_cd").val(data.item_cd);
+                    $("#item_nm").val(data.item_nm);
+                    $("#test_no").val(data.test_no);
+                    $("#receipt_status_nm").val(data.receipt_status_nm);
+                    $("#workroom_cd").val(data.workroom_cd);
+                    $("#receipt_pack_remain_qty").val(data.receipt_pack_remain_qty);
+                    $('#init_barcode').val(data.barcode);
+
+                    fn_callGridSelectPack(params, controllerName, "GridSelectPack");
+
+                    // 버튼 활성화 처리
+                    fn_setEnabledObj('btn_stack', 'btn-default', 'btn-primary', false);
+                    fn_setEnabledObj('btn_pick', 'btn-default', 'btn-primary', false);
+
+                }
+
+
+            }, beforeSend: function () {
+                fn_loading('show');
+            }, complete: function () {
+                fn_loading('hide');
+            }, error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+    }
+
+    /*
+     * 팩 정보(바코드)에 포함된 팩 사용 히스토리
+     */
+    function fn_callGridSelectPack(params, controllerName, actionName) {
+
+        var callUrl = "/" + controllerName + "/" + actionName;
+
+        var request = JSON.stringify(params);
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                $("#list_count").val(data.length);
+                $("#current_page").val(1);
+
+                for (var i = 0; i < data.length; i++) {
+
+                    var inout_type = data[i].inout_type;
+                    var inout_qty = data[i].inout_qty;
+                    var receipt_date = data[i].receipt_date;
+
+                    $('#packList > tbody').append('<tr><td>' + inout_type + '</td><td>' + inout_qty + '</td><td>' + receipt_date+'</td></tr>');
+
+                }
+                // 테이블 resize
+                resize_table();
+
+                // 페이징 처리
+                pagination();
+
+                //console.log(data);
+            }, complete: function () {
+                fn_loading('hide');
+            },
+            error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+    }
+
+
+    /*
+     *  팩/지함 적치 화면으로 이동
+     */
+    function fn_stackPack() {
+
+        // 웹 환경에선 적치/피킹 기능 제외 (테블릿 조회 목적)
+        if (document.getElementById('pc_object') && document.getElementById('pc_object').style.display === 'block') {
+            swal({
+                title: '웹 환경에선 적치/피킹 기능이 제한 됩니다.',
+                type: 'info'
+            });
+            return;
+        }
+
+        var controllerName = "PackStack";
+        var actionName = "Index";
+        var barcode = $('#init_barcode').val();
+        var area_barcode = "";
+        if ($('#barcode_val').val() != '' && fn_getBarcodePrefix($('#barcode_val').val()) != 'P') {
+            area_barcode = $('#barcode_val').val().replaceAll("\0", "");
+        }
+
+        // APP에서 barcode 넘길때 이상문자 붙음(\0).
+        // 그래서 replaceall로 모두 없앰.
+        var jsonParam = {
+            'barcode': barcode.replaceAll("\0", ""),
+            'module_cd': '@ViewData["module_cd"]',
+            'area_barcode': area_barcode
+        };
+
+        // 페이지 이동(적치 화면 이동)
+        fn_locationByGet(controllerName, actionName, jsonParam);
+        //fn_locationByPost(controllerName, actionName, jsonParam);
+
+    }
+
+
+    /*
+     *  팩/지함 피킹 처리
+     */
+    function fn_pickPack() {
+
+        if (document.getElementById('pc_object') && document.getElementById('pc_object').style.display === 'block') {
+            swal({
+                title: '웹 환경에선 적치/피킹 기능이 제한 됩니다.',
+                type: 'info'
+            });
+            return;
+        }
+
+        if ($("#workroom_cd").val() == '') {
+            swal({
+                title: '피킹 가능한 대상이 없습니다.',
+                type: 'info'
+            });
+            return;
+        }
+
+        var controllerName = "PackSelect";
+        var actionName = '';
+
+        if (confirm("피킹 하시겠습니까?")) {
+
+            var barcode = $("#barcode_val").val();
+            var preFix = barcode.substr(0, 1);
+            var actionName = '';
+
+            if (preFix == 'P') {        // 팩 바코드
+                actionName = 'PickSelectPack';
+            } else if (preFix == 'G') { // 지함 바코드
+                actionName = 'PickSelectBox';
+            }
+
+            var params = { 'barcode': barcode.replaceAll("\0", "") };
+            var callUrl = "/" + controllerName + "/" + actionName;
+
+            var request = JSON.stringify(params);
+            $.ajax({
+                method: "POST",
+                data: request,
+                url: callUrl,
+                dataType: 'json',
+                contentType: 'application/json; charset=UTF-8',
+                success: function (data) {
+
+                    if (data.result == '1') {
+                        swal({
+                            //title: 'Success!',
+                            title: '정상적으로 처리되었습니다.',
+                            type: 'success'
+                            //timer: 1000
+                        }
+                        ).then(
+                            function () {
+
+                                // 페이지 다시 로딩.
+                                fn_callBarcodeInfo({ 'barcode': $("#barcode_val").val() });
+
+                            }
+                        );
+                    }
+                },
+                error: function (data) {
+                    alert('error' + data.status);
+                }
+            });
+
+
+
+        } else {
+            return;
+        }
+
+    }
+
+
+    function resize_table() {
+        var count = $("#packList tbody tr").length;
+        var newHeight = 48 + (count * 45);
+
+        $("#packList").parent().removeClass("h-50");
+        $("#packList").parent().height(newHeight);
+    }
+
+</script>

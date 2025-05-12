@@ -1,0 +1,531 @@
+﻿
+@{
+    ViewData["Title"] = "PackSelect";
+    Layout = "~/Views/Shared/_GmsLayout.cshtml";
+
+}
+
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/animate/animate.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/util.css">
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/main.css">
+<!--===============================================================================================-->
+<environment names="Development">
+    <link rel="stylesheet" href="~/css/gms_01.css" />
+    <script src="~/Content/Login_v2/vendor/jquery/jquery-3.2.1.min.js"></script>
+</environment>
+
+
+<div class="content">
+    <div class="container-fluid padding-rl-del">
+        <div class="row margin-rl-del">
+
+            <div class="col-md-12 padding-rl-del">
+                <div class="card margin-bottom-0">
+
+                    <form class="form-horizontal">
+
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                팩/지함별 적치
+                            </h4>
+                        </div>
+
+                        <div class="card-content">
+
+                            <input type="hidden" name="barcode_val" id="barcode_val" />
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">코드</label>
+                                    <div class="col-sm-10" id="mobile_object" style="display:none">
+
+                                        <input type="text" id="item_cd" class="form-control" name="mobile_object" readonly="readonly" />
+
+                                    </div>
+                                    <div class="col-sm-10" id="pc_object" style="display:none">
+
+                                        <input type="text" id="item_cd" class="form-control" name="pc_object" onkeydown="onKeyDown();" onfocus="setBarcodeInit()" />
+
+                                    </div>
+                                </div>
+
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">품목명</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="item_nm" name="item_nm" class="form-control" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">시험번호</label>
+
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">No.</span>
+                                            <input type="text" placeholder="" class="form-control" id="test_no" name="test_no" readonly="readonly">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">상태</span>
+                                            <input type="text" placeholder="" class="form-control" id="receipt_status_nm" name="receipt_status_nm" readonly="readonly">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </fieldset>
+
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">재고량</label>
+
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">수량</span>
+                                            <input type="text" placeholder="" class="form-control" id="receipt_pack_remain_qty" name="receipt_pack_remain_qty" readonly="readonly">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">상태</span>
+                                            <input type="text" placeholder="" class="form-control" id="issue_status_nm" name="issue_status_nm" readonly="readonly">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <hr />
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">창고</label>
+
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">코드</span>
+                                            <input type="text" placeholder="" class="form-control" id="workroom_cd" name="workroom_cd" readonly="readonly">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">명칭</span>
+                                            <input type="text" placeholder="" class="form-control" id="workroom_nm" name="workroom_nm" readonly="readonly">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">구역</label>
+
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">코드</span>
+                                            <input type="text" placeholder="" class="form-control" id="zone_cd" name="zone_cd" readonly="readonly">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">명칭</span>
+                                            <input type="text" placeholder="" class="form-control" id="zone_nm" name="zone_nm" readonly="readonly">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">셀</label>
+
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">코드</span>
+                                            <input type="text" placeholder="" class="form-control" id="cell_cd" name="cell_cd" readonly="readonly">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">명칭</span>
+                                            <input type="text" placeholder="" class="form-control" id="cell_nm" name="cell_nm" readonly="readonly">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+
+                                    <div class="col-sm-12">
+                                        <hr />
+                                        <button id="btn_stack" type="button" class="btn btn-default btn-lg pull-right" disabled="disabled" onclick="javascript:fn_savePackStack('PackStack')">적 치</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </form>
+                </div>  <!-- end card -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+</div>
+
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/popper.js"></script>
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/js/main.js"></script>
+
+
+<script type="text/javascript">
+
+    // 이전 페이지 URL 셋팅
+    // 적치 후 이전 페이지로 돌아가기 위함.
+    var PRE_PAGE_URL = '';
+    var PAGE_MODE = '@ViewData["page_mode"]';
+    var btnEnableFlag1 = 0;     //팩/지함
+    var btnEnableFlag2 = 0;     //장소
+
+    $(document).ready(function () {
+
+        // 모바일 기기 체크
+        fn_moblieCK();
+
+        //demo.initOverviewDashboard();
+        //demo.initCirclePercentage();
+
+        PRE_PAGE_URL = document.referrer;
+
+        var barcode = '@ViewData["barcode"]';
+
+        fn_callBarcodeInfo({ 'barcode': barcode.replaceAll("\0", "") });
+
+
+        var area_barcode = '@ViewData["area_barcode"]';
+        if (typeof area_barcode == "undefined" || area_barcode == null || area_barcode == "") {
+        } else {
+            //장소 정보 조회
+            //fn_AreaSearch('PackStack', 'SelectArea', { 'barcode': area_barcode });
+            fn_callBarcodeInfo({ 'barcode': area_barcode });
+        }
+
+    });
+
+    // 바코드 초기화 (웹 환경에서 사용됨)
+    function setBarcodeInit() {
+
+        $('#item_cd').val('');
+
+    }
+
+    // 엔터키 동작 (웹 환경에서 사용됨)
+    function onKeyDown() {
+
+        // 엔터키 코드
+        if (event.keyCode == 13) {
+
+            var barcode = $("#item_cd").val();
+
+            // 포커스 해제
+            $("#item_cd").blur();
+
+            fn_callBarcodeInfo({ 'barcode': barcode.replaceAll("\0", "") });
+
+        }
+
+    }
+
+    /*
+     * 바코드관련 상세 정보 호출
+     * (창고,구역,셀 정보)
+     */
+    function fn_callBarcodeInfo(params) {
+
+        // 특수문자 제거
+        if (typeof params.barcode == "undefined" || params.barcode == null || params.barcode == "" || params.barcode == "null") {
+
+            params.barcode = params.barcode.replaceAll("\0", "");
+        }
+
+        if ((fn_getBarcodeFlag(params.barcode)) == 'PACK') {
+            // 스캔한 바코드 셋팅
+            $("#barcode_val").val(params.barcode);
+            //팩 정보 조회
+            fn_PackSearch('PackSelect', 'SelectPack', params);
+
+        } else if ((fn_getBarcodeFlag(params.barcode)) == 'LOCATION') {
+            //적치 장소 정보 조회
+            fn_AreaSearch('PackStack', 'SelectArea', params);
+        }
+
+    }
+
+    /*
+     * 팩 정보 조회
+     */
+    function fn_PackSearch(controllerName, actionName, params) {
+
+        btnEnableFlag1 = 0;// 초기화
+        var controllerName = controllerName;
+        var actionName = actionName;
+
+        var callUrl = "/" + controllerName + "/" + actionName;
+
+        var request = JSON.stringify(params);
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+
+                if (typeof data.item_cd == "undefined" || data.item_cd == null || data.item_cd == "" || data.item_cd == "null") {
+
+                    swal({
+                        title: '바코드 정보가 없습니다.',
+                        //text: '적치할 위치의 바코드정보를 스캔해주세요.',
+                        type: 'error'
+                        //timer: 1000
+                    });
+
+                    return;
+
+                } else {
+                    $("#receipt_status_nm").val("");
+                    $("#issue_status_nm").val("");
+
+                    $("#item_cd").val(data.item_cd);
+                    $("#item_nm").val(data.item_nm);
+                    $("#test_no").val(data.test_no);
+                    $("#receipt_status_nm").val(data.receipt_status_nm);
+                    $("#issue_status_nm").val(data.issue_status_nm);
+                    $("#receipt_pack_remain_qty").val(data.receipt_pack_remain_qty);
+
+                    btnEnableFlag1 = 1;
+                    if ((btnEnableFlag1 + btnEnableFlag2) == 2) {
+                        // 버튼 활성화 처리
+                        fn_setEnabledObj('btn_stack', 'btn-default', 'btn-primary', false);
+                    }
+
+                    fn_setStatusColor(fn_getBarcodePrefix(params.barcode), data.receipt_status, data.issue_status);
+                }
+
+            },
+            error: function (data) {
+                btnEnableFlag1 = 0;
+                alert('error' + data.status);
+            }
+        });
+
+    }
+
+
+
+    /*
+     * 출하 상태 색상 처리
+     **/
+    function fn_setStatusColor(gubun, rstatus , istatus) {
+
+        $("#receipt_status_nm").removeAttr("style");
+        $("#issue_status_nm").removeAttr("style");
+
+        if (gubun == "P") {
+            $("#div_test_no").text("시험번호");
+            //$("#issue_status_nm").hide();
+            if (rstatus == "1" || rstatus == "7") {//상태값에 따라 색상 세팅(공통코드 WR002 참조)
+                $("#receipt_status_nm").css("background-color", "yellow");
+                $("#receipt_status_nm").css("color", "black");
+            } else if (rstatus == "2" || rstatus == "3" || rstatus == "8") {
+                $("#receipt_status_nm").css("background-color", "red");
+                $("#receipt_status_nm").css("color", "black");
+            } else if (rstatus == "4" || rstatus == "5") {
+                $("#receipt_status_nm").css("background-color", "green");
+                $("#receipt_status_nm").css("color", "white");
+            } else {
+                $("#receipt_status_nm").css("background-color", "white");
+                $("#receipt_status_nm").css("color", "black");
+            }
+
+        } else if (gubun == "G") {
+
+            $("#div_test_no").text("제조번호");
+            $("#issue_status_nm").show();
+
+            //상태값에 따라 색상 세팅(공통코드 RT024 참조)
+            if (istatus == "1" || istatus == "2" || istatus == "3") {
+                $("#issue_status_nm").css("background-color", "yellow");
+                $("#issue_status_nm").css("color", "black");
+            } else if (istatus == "4") {
+                $("#issue_status_nm").css("background-color", "green");
+                $("#issue_status_nm").css("color", "white");
+            } else {
+                $("#issue_status_nm").css("background-color", "white");
+                $("#issue_status_nm").css("color", "black");
+            }
+
+             //시험 상태값에 따라 색상 세팅(시험대기 : 1, 시험중 : 2, 적합 : 3,  부적합 :4)
+            if (rstatus == "2") {
+                $("#receipt_status_nm").css("background-color", "yellow");
+                $("#receipt_status_nm").css("color", "black");
+            } else if (rstatus == "4") {
+                $("#receipt_status_nm").css("background-color", "green");
+                $("#receipt_status_nm").css("color", "white");
+            } else if (rstatus == "3") {
+                $("#receipt_status_nm").css("background-color", "red");
+                $("#receipt_status_nm").css("color", "black");
+            } else {
+                $("#receipt_status_nm").css("background-color", "white");
+                $("#receipt_status_nm").css("color", "black");
+            }
+        }
+    }
+
+
+    /*
+     * 적치 장소 정보 조회
+     */
+    function fn_AreaSearch(controllerName, actionName, params) {
+
+        //var controllerName = $("#controllerName").val();
+        //var actionName = $("#actionName").val();
+        btnEnableFlag2 = 0;
+        var callUrl = "/" + controllerName + "/" + actionName;
+        var request = JSON.stringify(params);
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                $("#workroom_cd").val(data.workroom_cd);
+                $("#workroom_nm").val(data.workroom_nm);
+                $("#zone_cd").val(data.zone_cd);
+                $("#zone_nm").val(data.zone_nm);
+                $("#cell_cd").val(data.cell_cd);
+                $("#cell_nm").val(data.cell_nm);
+
+                btnEnableFlag2 = 1;
+
+                if ((btnEnableFlag1 + btnEnableFlag2) == 2) {
+                    // 버튼 활성화 처리
+                    fn_setEnabledObj('btn_stack', 'btn-default', 'btn-primary', false);
+                }
+                //fn_setStatusColor('G', data.receipt_status, '');
+            },
+            error: function (data) {
+                btnEnableFlag2 = 0;
+                alert('error' + data.status);
+            }
+        });
+    }
+
+    /*
+     * 팩/지함을 해당 위치에 저장(적치) 함
+     */
+    function fn_savePackStack(controllerName) {
+
+        // 웹 환경에선 적치/피킹 기능 제외 (테블릿 조회 목적)
+        if (document.getElementById('pc_object') && document.getElementById('pc_object').style.display === 'block') {
+            swal({
+                title: '웹 환경에선 적치/피킹 기능이 제한 됩니다.',
+                type: 'info'
+            });
+            return;
+        }
+
+        var workroom_cd = $.trim($("#workroom_cd").val());
+        var zone_cd = $.trim($("#zone_cd").val());
+        var cell_cd = $.trim($("#cell_cd").val());
+        var area_barcode = workroom_cd + zone_cd + cell_cd;
+
+        // validation
+        if (typeof area_barcode == "undefined" || area_barcode == null || area_barcode == "") {
+
+            swal({
+                title: '적치할 위치 바코드정보 스캔 필요!',
+                //text: '적치할 위치의 바코드정보를 스캔해주세요.',
+                type: 'error'
+                //timer: 1000
+            });
+
+            return;
+        }
+
+        var barcode = $("#barcode_val").val();
+
+        barcode = barcode.replaceAll("\0", "");
+
+        var preFix = barcode.substr(0, 1);
+        var actionName = '';
+
+        if (preFix == 'P') {        // 팩 바코드
+            actionName = 'StackPack';//    stack_pack';
+        } else if (preFix == 'G') { // 지함 바코드
+            actionName = 'StackBox'; //stack_box';
+        }
+
+        var params = { 'barcode': barcode, 'workroom_cd': workroom_cd, 'zone_cd': zone_cd, 'cell_cd': cell_cd};
+        var callUrl = "/" + controllerName + "/" + actionName;
+
+        var request = JSON.stringify(params);
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                if (data.result == '1') {
+                    swal({
+                        //title: 'Success!',
+                        title: '정상적으로 처리되었습니다.',
+                        type: 'success'
+                        //timer: 1000
+                    }
+                    ).then(
+                        function () {
+                            window.location.href = PRE_PAGE_URL;
+                        }
+                    );
+                }
+            },
+            error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+    }
+
+</script>

@@ -1,0 +1,313 @@
+﻿
+@{
+    ViewData["Title"] = "WorkRoomSelect";
+    Layout = "~/Views/Shared/_GmsLayout.cshtml";
+}
+
+
+
+<!--===============================================================================================-->
+<!--<link rel="icon" type="image/png" href="~/Content/Table_Fixed_Header/images/icons/favicon.ico" />-->
+<!--===============================================================================================-->
+<!--<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/bootstrap/css/bootstrap.min.css">-->
+<!--===============================================================================================-->
+<!--<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/fonts/font-awesome-4.7.0/css/font-awesome.min.css">-->
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/animate/animate.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/util.css">
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/main.css">
+<!--===============================================================================================-->
+
+<environment names="Development">
+    <link rel="stylesheet" href="~/css/gms_01.css" />
+    <script src="~/Content/Login_v2/vendor/jquery/jquery-3.2.1.min.js"></script>
+</environment>
+
+<div class="content">
+    <div class="container-fluid padding-rl-del">
+        <div class="row margin-rl-del">
+
+            <div class="col-md-12 padding-rl-del">
+                <div class="card margin-bottom-0">
+
+                    <div class="card-header">
+                        <h4 class="card-title" id="div_title">
+                            창고 정보 조회
+
+                        </h4>
+                    </div>
+
+                    <div class="card-content">
+
+                        <fieldset>
+                            <div class="form-group has-success">
+
+                                <input type="hidden" name="controllerName" id="controllerName" value="WorkRoomSelect" />
+                                <input type="hidden" name="actionName" id="actionName" value="SelectWorkRoom" />
+
+                                <!-- 창고 바코드-->
+                                <input type="hidden" name="init_barcode" id="init_barcode" value="@ViewData["barcode"]" />
+
+                                <div class="form-horizontal" name="myForm" id="myForm">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">창고</label>
+                                        <div class="col-sm-9">
+                                            <input type="hidden" id="barcode_val" name="barcode_val" class="input-css" readonly="readonly" />
+                                            <input type="hidden" id="workroom_cd" name="workroom_cd" class="input-css" readonly="readonly" />
+                                            <input type="text" id="workroom" name="workroom" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">청정도등급</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="cleanness_cd" name="cleanness_cd" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">창고종류</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="workroom_type_nm" name="workroom_type_nm" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">창고상태</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="workroom_status_nm" name="workroom_status_nm" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">창고구분</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="warehouse_type_nm" name="warehouse_type_nm" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">우선순위</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="display_seq" name="display_seq" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">적치한계</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="cell_cnt" name="cell_cnt" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">적치 수</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="use_cell" name="use_cell" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">허용 온도</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="permit_temp" name="permit_temp" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px">허용 습도</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="permit_hum" name="permit_hum" class="input-css" readonly="readonly" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="form-group has-success">
+                                <hr />
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="form-group has-success">
+                                <div class="col-sm-12">
+
+                                    <button id="btn_stack" type="button" class="btn btn-default btn-lg" disabled="disabled" onclick="javascript:fn_stackPack()">적 치</button>
+                                    <button id="btn_pick" type="button" class="btn btn-default btn-lg pull-right" disabled="disabled" onclick="javascript:fn_pickPack()">피 킹</button>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                    </div>
+                </div>  <!-- end card -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+</div>
+
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/popper.js"></script>
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/js/main.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        if ($('#init_barcode').val() != '') {
+            var params = { 'barcode': $('#init_barcode').val() };
+
+            fn_callBarcodeInfo(params);
+        }
+
+    });
+
+    /*
+     * 바코드관련 상세 정보 호출
+     */
+    function fn_callBarcodeInfo(params) {
+
+        // 스캔한 바코드 셋팅
+        $("#barcode_val").val(params.barcode);
+
+        // 스캔한 바코드 분기처리
+        var barcode_gubun = fn_getBarcodePrefix(params.barcode);
+
+        // 팩/지함별 적치
+        if (barcode_gubun === 'P') {
+            controllerName = 'PackStack';
+            actionName = 'Index';
+
+            params.area_barcode = $('#init_barcode').val();
+
+            fn_locationByGet(controllerName, actionName, params);
+            return;
+        }
+
+
+        var controllerName = $("#controllerName").val();
+        var actionName = $("#actionName").val();
+        //var barcode = params.barcode;
+
+        var callUrl = "/" + controllerName + "/" + actionName;
+
+        var request = JSON.stringify(params);
+
+
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                if (typeof data.workroom_cd == "undefined" || data.workroom_cd == null || data.workroom_cd == "" || data.workroom_cd == "null") {
+
+                    swal({
+                        title: '바코드 정보가 없습니다.',
+                        //text: '적치할 위치의 바코드정보를 스캔해주세요.',
+                        type: 'error'
+                        //timer: 1000
+                    });
+
+                    return;
+
+                } else {
+                    $("#workroom_cd").val(data.workroom_cd);
+                    $("#workroom_nm").val(data.workroom_nm);
+                    $('#workroom').val(data.workroom_cd + ' / ' + data.workroom_nm); //결과값 조합
+                    $("#cleanness_cd").val(data.cleanness_cd);
+                    $("#workroom_type").val(data.workroom_type);
+                    $("#workroom_type_nm").val(data.workroom_type_nm);
+                    $("#warehouse_type").val(data.warehouse_type);
+                    $('#warehouse_type_nm').val(data.warehouse_type_nm);
+                    $('#workroom_status').val(data.workroom_status);
+                    $('#workroom_status_nm').val(data.workroom_status_nm);
+                    $('#display_seq').val(data.display_seq);
+                    $('#permit_temp').val(data.permit_temp);
+                    $('#permit_hum').val(data.permit_hum);
+                    $('#zone_cnt').val(data.zone_cnt);
+                    $('#cell_cnt').val(data.cell_cnt);
+                    $('#use_cell').val(data.use_cell);
+                    $('#init_barcode').val(data.barcode);
+
+                    // 버튼 활성화 처리
+                    fn_setEnabledObj('btn_stack', 'btn-default', 'btn-primary', false);
+                    fn_setEnabledObj('btn_pick', 'btn-default', 'btn-primary', false);
+                }
+
+            }, beforeSend: function () {
+                fn_loading('show');
+            }, complete: function () {
+                fn_loading('hide');
+            }, error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+
+    }
+
+
+    /*
+     *  팩/지함별 적치
+     */
+    function fn_stackPack() {
+
+        var controllerName = "PackStack";
+        var actionName = "Index";
+        var barcode = $('#init_barcode').val();
+        var area_barcode = "";
+        if ($('#barcode_val').val() != '' && fn_getBarcodePrefix($('#barcode_val').val()) != 'P') {
+            area_barcode = $('#barcode_val').val().replaceAll("\0", "");
+        }
+
+        // APP에서 barcode 넘길때 이상문자 붙음(\0).
+        // 그래서 replaceall로 모두 없앰.
+        var jsonParam = {
+            'barcode': barcode.replaceAll("\0", ""),
+            'module_cd': '@ViewData["module_cd"]',
+            'area_barcode': area_barcode
+        };
+
+        // 페이지 이동(적치 화면 이동)
+        fn_locationByGet(controllerName, actionName, jsonParam);
+
+    }
+
+    /*
+     *  피킹 처리
+     */
+    function fn_pickPack() {
+
+        var controllerName = "Picking";
+        var actionName = "Index";
+        var barcode = $('#init_barcode').val();
+
+        var jsonParam = {
+            'barcode': barcode.replaceAll("\0", ""),
+            module_cd: '@ViewData["module_cd"]'
+        };
+
+        fn_locationByGet(controllerName, actionName, jsonParam);
+
+    }
+
+</script>

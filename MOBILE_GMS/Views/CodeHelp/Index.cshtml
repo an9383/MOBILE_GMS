@@ -1,0 +1,232 @@
+﻿@model mobile_gms.Models.CodeHelpModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_CodeHelpLayout.cshtml";
+
+    CodeHelpModel codeHlep = ViewData["CodeHelpModel"] as CodeHelpModel;
+} 
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/bootstrap/css/bootstrap.min.css">   
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================--> 
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/main.css">
+<!--===============================================================================================-->
+
+<environment names="Development">
+    <link rel="stylesheet" href="~/css/gms_01.css" />
+    <script src="~/Content/Login_v2/vendor/jquery/jquery-3.2.1.min.js"></script>
+</environment>
+
+<style>
+    th, td {
+        text-align: center;
+        font-size: 14px !important;
+    }
+
+    .col-xs-3 {
+        width: 25% !important;
+    }
+
+    .col-xs-9 {
+        width: 75% !important;
+    }
+    .max-h-265 {
+        max-height: 265px !important;
+    }
+</style>
+
+<div class="content">
+    <div class="container-fluid padding-rl-del">
+
+
+        <div class="row" style="margin-bottom: 5px;">
+            <div class="col-md-12">
+                <!--
+            <div class="col-md-6">
+                <button id="btn_search" type="button" class="btn btn-info btn-lg pull-right" onclick="javascript:fn_search();" style="height:40px;">새로고침</button>
+            </div>
+                --> 
+                <button id="btn_search" type="button" class="btn btn-success btn-lg pull-right" onclick="javascript:self.close();" style="height:40px;">닫기</button>
+
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-content">
+                        <fieldset>
+                            <div class="form-group has-success">
+                                <div class="col-md-9 col-sm-9 col-xs-9 padding-rl-del">
+                                    <input type="text" id="tb_wherevalue" name="tb_wherevalue" placeholder="검색어를 입력해주세요." class="input-css" style="font-size : 15px;">
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-3 padding-rl-del">
+                                    <button id="btn_search" type="button" class="btn btn-primary btn-lg pull-right" onclick="javascript:fn_search()" style="height:40px;">검 색</button>
+                                </div>
+
+
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="form-group has-success">
+                                <hr />
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <!--
+       <button id="btn_stack" type="button" class="btn btn-default btn-lg pull-right" disabled="disabled" onclick="javascript:fn_packStack()">구 역 적 치</button>
+    -->
+
+                            <div class="table-responsive table-full-width max-h-265 h-50">
+                                <table id="srchList" class="table table-hover w-s-nr">
+                                    <thead style="background: #4EAE51; color: white;">
+                                    <th style="font-weight: 800;">코드</th>
+                                    <th style="font-weight: 800;">명칭</th>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </fieldset>
+
+                    </div>
+                </div>  <!-- end card -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+</div>
+
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/popper.js"></script>
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/js/main.js"></script>
+
+
+<script type="text/javascript">
+    $(function () {
+
+        resize_table();
+
+        if (screen.width > 360) {
+            $("#tb_wherevalue").css("font-size", "22px");
+        }
+
+    })
+
+
+    /*
+     * 바코드관련 상세 정보 호출
+     */
+    function fn_callBarcodeInfo(params) {
+
+    }
+
+
+    /*
+     * 데이터 검색
+     */
+    function fn_search() {
+
+        var tb_wherevalue = $.trim($("#tb_wherevalue").val());
+        // validation
+        if (typeof tb_wherevalue == "undefined" || tb_wherevalue == null || tb_wherevalue == "") {
+
+            swal({
+                title: '검색어를 입력해주세요.',
+                type: 'error',
+                allowOutsideClick: false,
+                closeOnClickOutside: false
+            }
+            ).then(
+                function () {
+                    setTimeout(function () {
+                        $("#tb_wherevalue").focus();
+                    }, 600);
+                }
+            );
+
+            return;
+        }
+
+        // 초기화
+        var params = { 'tb_wherevalue': tb_wherevalue, 'gubun':'@Model.gubun' };
+        $('#srchList > tbody').empty();
+        var callUrl = "/CodeHelp/CodeHelpSearch";
+        var request = JSON.stringify(params);
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+
+                    var srch_cd1 = data[i].srch_cd1;
+                    var srch_nm1 = data[i].srch_nm1;
+                    var srch_cd2 = data[i].srch_cd2;
+                    var srch_nm2 = data[i].srch_nm2;
+
+                    var trHtml = '<tr onclick="fn_choice(\'' + srch_cd1 + '\',\'' + srch_nm1 + '\',\'' + srch_cd2 + '\',\'' + srch_nm2 + '\')">';
+                    trHtml += '<td class="cell100" style="width : 40%; text-align: center">' + srch_cd1 + '</td>';
+                    trHtml += '<td><a style="color : #19741C; font-weight: 800;">' + srch_nm1 + '</td>';
+                    trHtml += '</tr>';
+
+                    $('#srchList > tbody').append(trHtml);
+                }
+
+                resize_table();
+            },
+            error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+    }
+
+    /*
+     * 검색 데이터 선택 및 부모창으로 데이터 전송
+     */
+    function fn_choice(srch_cd1, srch_nm1, srch_cd2, srch_nm2) {
+
+
+        try {
+            opener.document.getElementById("srch_cd1").value = srch_cd1;
+            opener.document.getElementById("srch_nm1").value = srch_nm1;
+            opener.document.getElementById("srch_cd2").value = srch_cd2;
+            opener.document.getElementById("srch_nm2").value = srch_nm2;
+        }
+        catch (e) {
+
+        }
+
+
+        opener.fn_search();
+
+        //window.close();
+        window.open('', '_self').close(); 
+    }
+
+    function resize_table() {
+        var count = $("#srchList tbody tr").length;
+        var newHeight = 48 + (count * 45);
+
+        $("#srchList").parent().removeClass("h-50");
+        $("#srchList").parent().height(newHeight);
+    }
+
+
+</script>

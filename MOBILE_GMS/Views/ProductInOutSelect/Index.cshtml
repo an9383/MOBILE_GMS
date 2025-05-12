@@ -1,0 +1,358 @@
+﻿
+@{
+    ViewData["Title"] = "ProductInOutSelect";
+    Layout = "~/Views/Shared/_GmsLayout.cshtml";
+}
+
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/animate/animate.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/util.css">
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/main.css">
+<!--===============================================================================================-->
+<environment names="Development">
+    <link rel="stylesheet" href="~/css/gms_01.css" />
+    <script src="~/Content/Login_v2/vendor/jquery/jquery-3.2.1.min.js"></script>
+</environment>
+
+
+
+<style>
+    #pagination a {
+        display: inline-block;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+    th, td {
+        text-align: center;
+    }
+</style>
+
+
+<div class="content">
+    <div class="container-fluid padding-rl-del">
+        <div class="row margin-rl-del">
+
+            <div class="col-md-12 padding-rl-del">
+                <div class="card margin-bottom-0">
+
+                    <div class="form-horizontal">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                완제품 수불현황 조회
+                            </h4>
+                        </div>
+
+                        <div class="card-content">
+
+                            <input type="hidden" name="barcode_val" id="barcode_val" />
+
+                            <input type="hidden" name="controllerName" id="controllerName" value="ProductInOutSelect" />
+                            <input type="hidden" name="actionName" id="actionName" value="ProductInfo" />
+
+                            <input type="hidden" name="box_barcode_no" id="box_barcode_no" />
+
+                            <!-- 페이징 처리 필요 변수 -->
+                            <input type="hidden" id="list_count" name="list_count" />
+                            <input type="hidden" id="current_page" name="current_page" />
+                            <input type="hidden" id="page_limit" name="page_limit" />
+                            <input type="hidden" id="max_page" name="max_page" />
+                            <input type="hidden" id="start_page" name="start_page" />
+                            <input type="hidden" id="end_page" name="end_page" />
+                            <input type="hidden" id="board_limit" name="board_limit" />
+
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">코드</label>
+                                    <div class="col-sm-10">
+                                        <span id="mobile_object" style="display:none">
+
+                                            <input type="text" class="form-control" id="item_cd" name="mobile_object" readonly="readonly" />
+
+                                        </span>
+                                        <span id="pc_object" style="display:none">
+
+                                            <input type="text" class="form-control" id="item_cd" name="pc_object" onkeydown="onKeyDown();" onfocus="setBarcodeInit()" />
+
+                                        </span>
+                                        @*임시 버튼
+                                            <input type="text" class="input-css" id="item_cd" onclick="fn_call_Info()" />*@
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">품목명</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="item_nm" class="input-css" />
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">제조번호</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="lot_no" class="input-css" />
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">단위</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="keeping_unit" class="input-css" />
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">입고량</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="receipt_qty" class="input-css" />
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label" style="margin-bottom: auto; font-size : 18px">재고량</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="stock_qty" class="input-css" />
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="form-group has-success">
+                                    <div class="col-sm-12">
+                                        <hr />
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="table-responsive table-full-width max-h-315 h-50">
+                                    <table id="productList" class="table table-hover w-s-nr">
+                                        <thead style="background: #4EAE51; color: white;">
+                                        <th class="cell100 column1">일자</th>
+                                        <th class="cell100 column2">구분</th>
+                                        <th class="cell100 column3">수량</th>
+                                        </thead>
+
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </fieldset>
+
+                            <fieldset style="text-align: center;">
+                                <ul class="pagination">
+                                </ul>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>  <!-- end card -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+</div>
+
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/popper.js"></script>
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/js/main.js"></script>
+
+
+<script type="text/javascript">
+
+    jQuery('document').ready(function () {
+
+        // 모바일 기기 체크
+        fn_moblieCK();
+
+        if (screen.height > 640) {
+            $("#productList").parent().removeClass("max-h-315");
+            $("#productList").parent().addClass("max-h-650");
+        }
+
+        // 테이블 resize 핸들러
+        resize_table();
+
+        var checkWeb = fn_mobile_ckeck();
+        if (checkWeb == "web") {
+            $("div.table-responsive.table-full-width").css("overflow-x", "auto");
+            resize_Web_table("productList", 650);
+        }
+
+    });
+
+    // 바코드 초기화 (웹 환경에서 사용됨)
+    function setBarcodeInit() {
+
+        $('#item_cd').val('');
+
+    }
+
+    // 엔터키 동작 (웹 환경에서 사용됨)
+    function onKeyDown() {
+
+        // 엔터키 코드
+        if (event.keyCode == 13) {
+
+            var barcode = $("#item_cd").val();
+
+            // 포커스 해제
+            $("#item_cd").blur();
+
+            fn_callBarcodeInfo({ 'barcode': barcode.replaceAll("\0", "") });
+
+        }
+
+    }
+
+
+    function fn_callBarcodeInfo(params) {
+
+        // 컨트롤 / 액션
+        var controllerName = $("#controllerName").val();
+        var actionName = $("#actionName").val();
+
+        var callUrl = "/" + controllerName + "/" + actionName;
+        var request = JSON.stringify(params);
+
+        // 화면 초기화
+        $("#item_cd").val("");
+        $("#item_nm").val("");
+        $("#lot_no").val("");
+        $("#keeping_unit").val("");
+        $("#receipt_qty").val("");
+        $("#stock_qty").val("");
+        $('#productList > tbody').empty();
+
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                $("#list_count").val(data.length);
+                $("#current_page").val(1);
+
+                if (typeof data.box_barcode_no == "undefined" || data.box_barcode_no == null || data.box_barcode_no == "" || data.box_barcode_no == "null") {
+
+                    swal({
+                        title: '바코드 정보가 없습니다.',
+                        //text: '적치할 위치의 바코드정보를 스캔해주세요.',
+                        type: 'error'
+                        //timer: 1000
+                    });
+
+                    return;
+
+                } else {
+
+                    $("#item_cd").val(data.item_cd);
+                    $("#item_nm").val(data.item_nm);
+                    $("#lot_no").val(data.lot_no);
+                    $("#keeping_unit").val(data.keeping_unit);
+                    $("#receipt_qty").val(data.receipt_qty);
+                    $("#stock_qty").val(data.stock_qty);
+                    $("#box_barcode_no").val(data.box_barcode_no);
+                    $("#barcode").val(data.box_barcode_no);
+                }
+
+                console.log(data.box_barcode_no);
+
+                params = {
+                    'box_barcode_no': data.box_barcode_no,
+                    'page': $("#current_page").val()
+                }
+
+                fn_GridSelect(params, "ProductInOutSelect", "GridSelect");
+
+            }, beforeSend: function () {
+                fn_loading('show');
+            }, complete: function () {
+                fn_loading('hide');
+            }, error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+    }
+
+    /*
+     * 완제품 수불현황 히스토리
+     */
+    function fn_GridSelect(params, controllerName, actionName) {
+
+        var callUrl = "/" + controllerName + "/" + actionName;
+
+        var request = JSON.stringify(params);
+
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                $('#productList > tbody').empty();
+                $("#list_count").val(data.length);
+                $("#current_page").val(1);
+
+                console.log(data.length);
+
+                for (var i = 0; i < data.length; i++) {
+
+                    var issue_date = data[i].issue_date;
+                    var inout_type = data[i].inout_type;
+                    var issue_qty = data[i].issue_qty;
+
+                    $('#productList > tbody').append('<tr class="row100 body" style="text-align: center;" ><td class="cell100 column1">' + issue_date
+                        + '</td><td class="cell100 column2">' + inout_type
+                        + '</td><td class="cell100 column3">' + issue_qty + '</td></tr>');
+                }
+                // 테이블 resize
+                resize_table();
+
+                // 페이징 처리
+                pagination();
+
+                console.log(data);
+            },
+            error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+    }
+
+
+    function resize_table() {
+        var count = $("#productList tbody tr").length;
+        var newHeight = 48 + (count * 45);
+
+        $("#productList").parent().removeClass("h-50");
+        $("#productList").parent().height(newHeight);
+    }
+
+</script>

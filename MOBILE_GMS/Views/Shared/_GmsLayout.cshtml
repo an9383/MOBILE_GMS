@@ -1,0 +1,1013 @@
+﻿
+@using Microsoft.AspNetCore.Http;
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="~/Content/dashboard_bootstrap/assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="~/Content/dashboard_bootstrap/assets/img/favicon.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>GMS GREEN</title>
+
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-store">
+    <META HTTP-EQUIV="Expires" CONTENT="-1">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+
+    <!-- Bootstrap core CSS     -->
+    <link href="~/Content/dashboard_bootstrap/assets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!--  Paper Dashboard core CSS    -->
+    <link href="~/Content/dashboard_bootstrap/assets/css/paper-dashboard.css" rel="stylesheet" />
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="~/Content/dashboard_bootstrap/assets/css/demo.css" rel="stylesheet" />
+
+    <!--  Fonts and icons     -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+    <link href="~/Content/dashboard_bootstrap/assets/css/themify-icons.css" rel="stylesheet">
+    <link href="~/css/jquery.bootstrap-touchspin.css" type="text/css" />
+
+    <style>
+
+        .navbar-toggle {
+            margin: 10px 15px 17px 0 !important;
+        }
+
+        .footer {
+            background: #4caf50e0 !important;
+        }
+
+        .copyright {
+            color: #ffffff !important;
+            font-size: 12px !important;
+        }
+
+        .navbar-default .navbar-brand {
+            color: #ffffff !important;
+            font-size: 16px !important;
+        }
+
+        .table100.ver1 th {
+            font-size: 13px !important;
+        }
+
+        .table100.ver1 td {
+            font-size: 13px !important;
+        }
+
+        #wait {
+            display: none;
+            width: 134px;
+            height: 25px;
+            border: 1px solid #636161;
+            background-color: white;
+            position: absolute;
+            top: 40%;
+            left: 44%;
+            padding: 2px;
+            z-index: 9999;
+            text-align: center;
+        }
+
+        .selTrColor {
+            background-color: #9DCFFF
+        }
+
+        .input-css {
+            background-color: #F3F2EE;
+            border: 1px solid #e8e7e3;
+            border-radius: 4px;
+            color: #66615b;
+            font-size: 14px;
+            padding: 7px 18px;
+            height: 40px;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            width: 100%;
+        }
+
+            .input-css:focus {
+                border: 1px solid #e8e7e3;
+                background-color: #FFFFFF;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                outline: 0 !important;
+            }
+
+        .btn-gms {
+            display: inline-block;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: .5rem .75rem;
+            font-size: 2rem;
+            line-height: 1.25;
+            border-radius: .25rem;
+            transition: all .15s ease-in-out;
+            margin-left: 10px;
+            width: 100px;
+        }
+
+        .btn-gms-info {
+            color: #fff;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+            .btn-gms-info:hover {
+                color: #fff;
+                background-color: #138496;
+                border-color: #117a8b;
+            }
+
+
+        /*여백제거용 Style*/
+
+        /*padding 관련*/
+        .layout-content-padding {
+            padding: 9px 5px !important;
+        }
+
+        .padding-rl-del {
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+        }
+
+
+        /*margin 관련*/
+        .margin-rl-del {
+            margin-right: 0px !important;
+            margin-left: 0px !important;
+        }
+
+        .margin-bottom-5 {
+            margin-bottom: 5px !important;
+        }
+
+        .margin-bottom-0 {
+            margin-bottom: 0px !important;
+        }
+
+
+
+        /* height 관련*/
+        .h-50 {
+            height: 50px !important;
+        }
+
+        .max-h-315 {
+            max-height: 315px !important;
+        }
+
+        .max-h-360 {
+            max-height: 360px !important;
+        }
+
+        .max-h-500 {
+            max-height: 500px !important;
+        }
+
+        .max-h-650 {
+            max-height: 650px !important;
+        }
+
+        .max-h-720 {
+            max-height: 720px !important;
+        }
+
+
+        /* table white-space 관련*/
+        .w-s-nr {
+            white-space: nowrap;
+        }
+
+        .sp-db {
+            font-size: 19px !important;
+            line-height: 55px !important;
+            font-weight: 900 !important;
+        }
+
+        .sp-blue-db {
+            font-size: 17px !important;
+            line-height: 55px !important;
+            font-weight: 900 !important;
+        }
+
+        a > i {
+            margin-right: 25px !important;
+        }
+
+
+        /*.btn-info {
+            color: #fff;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            font-size: 18px;
+            margin-left: 10px;
+            width: 20%;
+        }*/
+
+
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="sidebar" data-background-color="brown" data-active-color="danger">
+            <!--
+                Tip 1: you can change the color of the sidebar's background using: data-background-color="white | brown"
+                Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
+            -->
+            <div class="logo" style="text-align: center;">
+                <a href="#" class="simple-text logo-normal" style="color:#4caf50e0 ; font-size:25px;font-weight:bold;">
+                    GMS
+                </a>
+            </div>
+            <div class="sidebar-wrapper">
+                <div class="user">
+                    <div class="info">
+                        <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                            <span>
+                                @Context.Session.GetString("USER_NAME")
+                            </span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <ul class="nav" style="font-size:17pt">
+
+                    @foreach (var menu in ViewData["MenuList"] as List<mobile_gms.Models.MenuModel>)
+                    {
+                        var checkIcon = "";
+                        switch (menu.module_cd)
+                        {
+                            case "P10000000":
+                                checkIcon = "ti-desktop";
+                                break;
+
+                            case "P20000000":
+                                checkIcon = "ti-layout";
+                                break;
+
+                            case "P30000000":
+                                checkIcon = "ti-shopping-cart-full";
+                                break;
+
+                            case "P40000000":
+                                checkIcon = "ti-gift";
+                                break;
+
+                            case "P50000000":
+                                checkIcon = "ti-package";
+                                break;
+
+                            case "P60000000":
+                                checkIcon = "ti-pencil-alt";
+                                break;
+
+                        }
+
+                        <li>
+                            <a href="javascript: fn_menu('@menu.module_cd');">
+                                <i class="@checkIcon"></i>
+                                <span class="sidebar-normal">@menu.module_nm</span>
+                            </a>
+                        </li>
+
+                    }
+
+                </ul>
+
+
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <nav class="navbar navbar-default" style=" height: 50px !important;  margin-top: -10px !important; background-image:url('/images/top_bg.png'); ">
+                <div class="container-fluid" style="height: 50px;">
+                    <div class="navbar-minimize" style="margin: 10px 15px 17px 0">
+                        <button id="minimizeSidebar" class="btn btn-fill btn-icon"><i class="ti-more-alt"></i></button>
+                    </div>
+                    <div class="navbar-header" style=" height: 50px !important;">
+                        <button type="button" class="navbar-toggle">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar bar1"></span>
+                            <span class="icon-bar bar2"></span>
+                            <span class="icon-bar bar3"></span>
+                        </button>
+                        <a class="navbar-brand" href="javascript: fn_menu('P10000000');" style="padding: 10px 15px 10px 10px;">
+                            <i class="fa fa-home"> 메인</i>
+                        </a>
+                        <!--
+                        <a class="navbar-brand" href="#Dashboard" style="padding: 10px 15px 10px 10px;">
+                            <i class="fa fa-times"> 닫기</i>
+                        </a>
+
+                        -->
+                        <a class="navbar-brand" href="javascript:fn_logout();" style="padding: 10px 15px 10px 10px;">
+                            <i class="fa fa-power-off"> 종료</i>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="content layout-content-padding">
+                <div class="container-fluid padding-rl-del">
+
+                    <!-- 로딩바 -->
+                    <div id="wait">
+                        <img src='~/images/loading_bar.gif' /><br><br>Loading..
+                    </div>
+                    <!-- 컨텐츠 -->
+                    @RenderBody()
+                </div>
+            </div>
+            <footer class="footer" style="background-image:url('/images/top_bg.png');">
+                <div class="container-fluid">
+                    <!--
+                    <nav class="pull-left">
+                        <ul>
+                            <li>
+                                <a href="https://www.creative-tim.com">
+                                    Creative Tim
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://blog.creative-tim.com">
+                                    Blog
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.creative-tim.com/license">
+                                    Licenses
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                        -->
+                    <div class="copyright">
+                        상호: (주)그린제약 | 대표 : 홍준표 <br />
+                        ©2015 Green Pharmaceutical Co.,Ltd.All Rights Reserved.
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+
+<!--   Core JS Files. Extra: TouchPunch for touch library inside jquery-ui.min.js   -->
+<script src="~/Content/dashboard_bootstrap/assets/js/jquery.min.js" type="text/javascript"></script>
+<script src="~/Content/dashboard_bootstrap/assets/js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="~/Content/dashboard_bootstrap/assets/js/perfect-scrollbar.min.js" type="text/javascript"></script>
+<script src="~/Content/dashboard_bootstrap/assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!--  Forms Validations Plugin -->
+<script src="~/Content/dashboard_bootstrap/assets/js/jquery.validate.min.js"></script>
+
+<!-- Promise Library for SweetAlert2 working on IE -->
+<script src="~/Content/dashboard_bootstrap/assets/js/es6-promise-auto.min.js"></script>
+
+<!--  Plugin for Date Time Picker and Full Calendar Plugin-->
+<script src="~/Content/dashboard_bootstrap/assets/js/moment.min.js"></script>
+
+<!--  Date Time Picker Plugin is included in this js file -->
+<script src="~/Content/dashboard_bootstrap/assets/js/bootstrap-datetimepicker.js"></script>
+
+<!--  Select Picker Plugin -->
+<script src="~/Content/dashboard_bootstrap/assets/js/bootstrap-selectpicker.js"></script>
+
+<!--  Switch and Tags Input Plugins -->
+<script src="~/Content/dashboard_bootstrap/assets/js/bootstrap-switch-tags.js"></script>
+
+<!-- Circle Percentage-chart -->
+<script src="~/Content/dashboard_bootstrap/assets/js/jquery.easypiechart.min.js"></script>
+
+<!--  Notifications Plugin    -->
+<script src="~/Content/dashboard_bootstrap/assets/js/bootstrap-notify.js"></script>
+
+<!-- Sweet Alert 2 plugin -->
+<script src="~/Content/dashboard_bootstrap/assets/js/sweetalert2.js"></script>
+
+<!-- Vector Map plugin -->
+<script src="~/Content/dashboard_bootstrap/assets/js/jquery-jvectormap.js"></script>
+
+<!--  Google Maps Plugin    -->
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script> -->
+<!-- Wizard Plugin    -->
+<script src="~/Content/dashboard_bootstrap/assets/js/jquery.bootstrap.wizard.min.js"></script>
+
+<!--  Bootstrap Table Plugin    -->
+<script src="~/Content/dashboard_bootstrap/assets/js/bootstrap-table.js"></script>
+
+<!--  Plugin for DataTables.net  -->
+<script src="~/Content/dashboard_bootstrap/assets/js/jquery.datatables.js"></script>
+
+<!--  Full Calendar Plugin    -->
+<script src="~/Content/dashboard_bootstrap/assets/js/fullcalendar.min.js"></script>
+
+<!-- Paper Dashboard PRO Core javascript and methods for Demo purpose -->
+<script src="~/Content/dashboard_bootstrap/assets/js/paper-dashboard.js"></script>
+
+<!-- Paper Dashboard PRO DEMO methods, don't include it in your project! -->
+<script src="~/Content/dashboard_bootstrap/assets/js/demo.js"></script>
+<script src="~/js/jquery/jquery.bootstrap-touchspin.js"></script>
+
+
+<script type="text/javascript">
+
+    String.prototype.replaceAll = function (org, dest) {
+        return this.split(org).join(dest);
+    }
+
+    $(document).ready(function () {
+        //demo.initOverviewDashboard();
+        //demo.initCirclePercentage();
+
+
+        if (screen.width < 361) {
+            $("#wait").css("left", "33%");
+
+            $(".numbers").addClass("sp-db");
+
+            var cardColor = $(".card").css("background-color");
+            var blueCode = "rgb(184, 216, 216)";
+            var whiteCode = "rgb(255, 255, 255)";
+            var brownCode = "rgb(214, 193, 171)";
+
+            if (cardColor == blueCode || cardColor == whiteCode || cardColor == brownCode) {
+                $(".numbers").removeClass("sp-db");
+                $(".numbers").addClass("sp-blue-db");
+            }
+
+        }
+
+        var min_height = $("body").height() - ($("nav.navbar").height() + $("footer").height());
+        $(".content.layout-content-padding").css("min-height", min_height + 8);
+
+    });
+
+    /*
+     * 메뉴 변경(상위)
+     */
+                function fn_menu(moduleCd) {
+                        window.location.href = '@Url.Action("DashBoard", "Main")?module_cd=' + moduleCd;
+                    }
+
+                    /*
+                     * 메뉴 변경(하위)
+                     */
+                    function fn_subMenu(sourceCd, moduleCd) {
+                        var controllerName = sourceCd;
+                        var actionName = "Index";
+                        var subMainUrl = "/" + controllerName + "/" + actionName + "?module_cd=" + moduleCd;
+                        window.location.href = subMainUrl;
+                    }
+
+                    /*
+                     * 화면 이동( 공통 , GET 방식)
+                     * parameter => {'key':'value'.... 형태로 넘길것.}
+                     */
+                    function fn_locationByGet(controllerName, actionName, parameter) {
+
+                        var controllerName = controllerName;
+                        var actionName = actionName;
+                        var param = '';
+
+                        if (typeof actionName == "undefined" || actionName == null || actionName == "") {
+                            //controllerName = controllerName;
+                            actionName = "Index";
+                        }
+
+                        var recursiveEncoded = $.param(parameter);
+                        if (Object.keys(parameter).length > 0) {
+                            param = "?" + recursiveEncoded
+                        }
+
+                        var goUrl = "/" + controllerName + "/" + actionName + param;
+                        window.location.href = goUrl;
+                    }
+
+                    /*
+                     * 화면 이동( 공통 , POST 방식)
+                     * parameter => {'key':'value'.... 형태로 넘길것.}
+                     */
+                    function fn_locationByPost(controllerName, actionName, parameter) {
+
+                        var controllerName = controllerName;
+                        var actionName = actionName;
+                        var hiddenField = '';
+
+                        if (typeof actionName == "undefined" || actionName == null || actionName == "") {
+                            //controllerName = controllerName;
+                            actionName = "Index";
+                        }
+
+                        var goUrl = "/" + controllerName + "/" + actionName
+
+
+        var form = document.createElement("form");
+                        form.setAttribute("charset", "UTF-8");
+                        form.setAttribute("method", "Post");  //Post 방식
+                        form.setAttribute("action", goUrl); //요청 보낼 주소
+
+                        var hiddenField = ''; // document.createElement("input");
+                        if (Object.keys(parameter).length > 0) {
+                            Object.keys(parameter).forEach(function (k) {
+                                hiddenField = document.createElement("input");
+                                hiddenField.setAttribute("type", "hidden");
+                                hiddenField.setAttribute("name", k);
+                                hiddenField.setAttribute("value", parameter[k]);
+                                form.appendChild(hiddenField);
+
+                            });
+                        }
+
+                        document.body.appendChild(form);
+
+                        form.submit();
+
+                    }
+
+
+
+                    /*
+                     * 로그아웃
+                     */
+                    function fn_logout() {
+
+                        window.location.href = '@Url.Action("Logout", "Login")';
+
+                    }
+
+                    /*
+                     * App에서 호출하는 Javascript
+                     * App -> Web 호출
+                     * -역할 : 앱에서 바코드 스캔 정보를 Web에 전달할때 받는 스크립트 함수
+                     */
+                    function fn_setBarcodeByApp(barcode) {
+
+                        fn_callBarcodeInfo({ 'barcode': barcode.replaceAll("\0", "") });
+                    }
+
+                    /*
+                     * 객체 활성화/비활성화
+                     */
+                    function fn_setEnabledObj(objId, removeCls, addCls, ableFlag) {
+
+                        var obectId = objId;
+                        var abled = false;  // 활성화 기본 설정.
+
+                        if (typeof removeCls == "undefined" || removeCls == null || removeCls == "") {
+                        } else {
+            $("#" + obectId).removeClass(removeCls);
+                        }
+
+                        if (typeof addCls == "undefined" || addCls == null || addCls == "") {
+                        } else {
+            $("#" + obectId).addClass(addCls);
+                        }
+
+                        if (typeof ableFlag == "undefined" || ableFlag == null || ableFlag == "") {
+            $("#" + obectId).attr("disabled", false);
+
+                        } else {
+            $("#" + obectId).attr("disabled", ableFlag );
+
+                        }
+                    }
+
+                    /*
+                     * 바코드로 팩/지함인지, 장소인지 구분
+                     */
+                    function fn_getBarcodeFlag(barcode) {
+
+                        var preFix = barcode.replaceAll("\0", "").substr(0, 1);
+
+                        if ((preFix == 'P') || (preFix == 'G')) {        // 팩/지함 바코드(P:팩 ,G:지함[BOX])
+                            return 'PACK';
+                        } else if ((preFix == 'W') || (preFix == 'Z') || (preFix == 'C')) { // 장소 정보 코드(W:창고 ,Z:구역,C:셀)
+                            return 'LOCATION';
+                        }
+                    }
+
+
+
+                    /*
+                     * 바코드 앞 1 자리 리턴
+                     */
+                    function fn_getBarcodePrefix(barcode) {
+
+                        var preFix = barcode.replaceAll("\0", "").substr(0, 1);
+
+                        return preFix;
+                    }
+
+                    /*
+                     * 공통 ( 품목 코드 검색 창 open )
+                     */
+                    function fn_findItem(winNamd, gubun, srchTitle) {
+
+                        var srch_form = document.srch_form;
+                        var srch_url = "/CodeHelp/Index";
+                        // 검색어 호출
+                        //var item_cd = $("#srch_item_cd").val();
+                        //var item_nm = $("#srch_item_nm").val();
+
+                        window.open(srch_url, winNamd, 'menubar=no, status=yes, toolbar=no, width=450, height=550');
+
+
+                        srch_form.action = srch_url;
+                        srch_form.method = "POST";
+                        srch_form.target = winNamd;
+                        // 검색어 셋팅
+                        srch_form.gubun.value = gubun;
+                        srch_form.srchTitle.value = srchTitle;
+                        srch_form.submit();
+
+
+        $('#btn_itemFind').blur();  // 검색 버튼 포커스 없애기..
+
+                    }
+
+                    /*
+                     * 로딩바 보이기/숨기기
+                     */
+                    function fn_loading(mode) {
+                        if (mode == "show") {
+            $("#wait").css("display", "block");
+                        } else {
+            $("#wait").css("display", "none");
+                        }
+                    }
+
+
+                    /*
+                     * 공통 코드 호출
+                     */
+                    function fn_commonCd(params) {
+
+                        var callUrl = "/CodeHelp/ListCommonCode";
+
+                        var request = JSON.stringify(params);
+        $.ajax({
+                        method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                                fn_commonCdSet(data);
+
+                            },
+            error: function (data) {
+                                btnEnableFlag1 = 0;
+                                alert('error' + data.status);
+                            }
+                        });
+                    }
+
+
+    // 웹으로 접속 시 테이블 높이 재설정
+    function resize_Web_table(targetTable, maxHeight) {
+        if (maxHeight != 650) {
+            $("#" + targetTable).parent().removeClass("max-h-720");
+        } else {
+            $("#" + targetTable).parent().removeClass("max-h-650");
+        }
+
+        $("#" + targetTable).parent().removeClass("max-h-315");
+        $("#" + targetTable).parent().addClass("max-h-500");
+    }
+
+    /**
+     *  모바일 기기 확인
+     */
+    function fn_moblieCK() {
+        // 모바일 기기 여부 변수에 담기
+
+        var m_userAgent_All = navigator.userAgent.toLowerCase();
+
+        var m_userAgent = '';
+
+        var m_mobile = new Array('iphone', 'ipod', 'ipad', 'android', 'blackberry', 'windows ce', 'nokia', 'webos', 'opera mini', 'sonyericsson', 'opera mobi', 'iemobile', 'mot');
+
+        var m_mobileCheck = 0;
+
+
+
+        for (var m_count = 0; m_count < m_mobile.length; m_count++) {
+
+            if (m_userAgent_All.indexOf(m_mobile[m_count]) != -1) {
+
+                m_mobileCheck++;
+
+                m_userAgent = m_mobile[m_count];
+
+            }
+
+        }
+
+        var m_platform = navigator.platform.toLowerCase();
+        var m_platform_filter = new Array('win16', 'win32', 'win64', 'mac', 'macintel');
+
+
+        for (var m_count = 0; m_count < m_platform_filter.length; m_count++) {
+
+            if (m_platform.indexOf(m_platform_filter[m_count]) != -1) {
+
+                m_mobileCheck = 0;
+
+            }
+
+        }
+
+        // 모바일 체크 변수 사용
+
+        if (m_mobileCheck > 0) {
+
+            // 모바일기기 입니다.
+            $("#mobile_object").css("display", "block");
+            $("#pc_object").css("display", "none");
+
+            // 아이디 충돌 방지를 위해 웹 용 아이디 값 변경
+            if (document.getElementsByName('pc_object') && document.getElementsByName('pc_object')[0]) {
+                document.getElementsByName('pc_object')[0].setAttribute("id", "pc_object_disable");
+            }
+
+            return;
+
+        } else {
+
+            // 모바일기기가 아닙니다.
+            $("#mobile_object").css("display", "none");
+            $("#pc_object").css("display", "block");
+
+            // 아이디 충돌 방지를 위해 모바일 용 아이디 값 변경
+            if (document.getElementsByName('pc_object') && document.getElementsByName('mobile_object')[0]) {
+                document.getElementsByName('mobile_object')[0].setAttribute("id", "mobile_object_disable");
+            }
+
+
+            return;
+
+        }
+    }
+
+    /**
+     * 모바일&웹 접속여부 return 값
+     */
+    function fn_mobile_ckeck() {
+        var isMobile = false;
+        var WebName = "Win16|Win32|Win64|Mac|Macintel";
+
+        isMobile = WebName.indexOf(navigator.platform) > 0 ? false : true;
+
+        if (isMobile) {
+            // 모바일 기기 (PDA)
+            return 'moblie';
+        } else {
+            // 웹 브라우저 (테블릿)
+
+            return 'web';
+        }
+    }
+
+    // 페이징 처리 함수
+    function pagination() {
+        /* 페이징 관련 변수 선언 부분 */
+        var list_count; // 모든 목록의 수
+
+        var current_page; // 현재 페이지
+
+        var page_limit; // 한 페이지 하단에 보여질 페이지 수
+        var max_page;  // 전체 페이지의 가장 마지막 페이지
+        var start_page;  // 한 페이지 하단에 보여질 시작 페이지
+        var end_page;  // 한 페이지 하단에 보여질 끝 페이지
+
+        var board_limit;  // 한 페이지에 보여질 게시글의 최대 수
+
+        current_page = $("#current_page").val() != 1 ? $("#current_page").val() : 1;
+
+        var checkWeb = fn_mobile_ckeck();
+        if (checkWeb == "web") {
+            page_limit = 10;
+            board_limit = 10;
+        } else {
+            page_limit = 4;
+            board_limit = 5;
+        }
+
+        list_count = $("#list_count").val();
+        max_page = Math.ceil(list_count / board_limit);
+        start_page = parseInt((current_page - 1) / page_limit) * page_limit + 1;
+        end_page = (start_page + page_limit) - 1;
+        if (end_page > max_page) {
+            end_page = max_page;
+        }
+
+        $("#list_count").val(list_count);
+        $("#current_page").val(current_page);
+        $("#page_limit").val(page_limit);
+        $("#max_page").val(max_page);
+        $("#start_page").val(start_page);
+        $("#end_page").val(end_page);
+        $("#board_limit").val(board_limit);
+        /* 페이징 관련 변수 선언 끝 */
+
+
+        /* 페이징html 입력 부분 */
+        $("ul.pagination").children().remove();
+
+
+
+
+        var $tr = jQuery('tbody tr');
+
+        if (max_page > 1) {
+            // previous버튼
+            // 첫 로딩 시 prev버튼 비활성화를 위해 class='disabled' 추가
+            jQuery('.pagination').append("<li class='disabled'><a id='preA'>Previous</a></li>");
+
+            // 페이징 숫자버튼
+            for (var i = start_page; i <= end_page; i++) {
+                jQuery('.pagination').append("<li><a>" + i + "</a></li>");
+            }
+
+            // next버튼
+            jQuery('.pagination').append("<li><a id='nextA'>Next</a></li>");
+
+            // 버튼 세부 설정
+            jQuery('.pagination a').addClass("pagination-link");
+            if (current_page % board_limit == 1) {
+                $(".pagination li").eq(1).addClass("active");
+            }
+        }
+
+        next_btn_css();
+
+        // 현재 페이지에 맞추어 목록 show
+        $tr.each(function (i) {
+            jQuery(this).hide();
+            if (i + 1 <= board_limit) {
+                $tr.eq(i).show();
+            }
+        });
+        /* 페이징html 입력 부분 끝 */
+
+
+        // 페이징 버튼 클릭 이벤트 시 함수 실행
+        $(".pagination a").click(".pagination-link", function (e) {
+            e.preventDefault();
+
+            var go_page = $(this).text();
+
+            var list_count = parseInt($("#list_count").val());  // 모든 목록의 수
+            var current_page = parseInt($("#current_page").val());  // 현재 페이지
+            var max_page = parseInt($("#max_page").val());  // 전체 페이지의 가장 마지막 페이지
+            var start_page = parseInt($("#start_page").val());  // 한 페이지 하단에 보여질 시작 페이지
+            var end_page = parseInt($("#end_page").val());  // 한 페이지 하단에 보여질 끝 페이지
+            var board_limit = parseInt($("#board_limit").val());  // 한 페이지에 보여질 게시
+            var page_limit = parseInt($("#page_limit").val());; // 한 페이지 하단에 보여질 페이지 수
+
+            if (go_page == "Previous") {
+                go_page = (parseInt(current_page) - 1) === 0 ? 1 : parseInt(current_page) - 1;
+            } else if (go_page == "Next") {
+                go_page = parseInt(current_page) + 1 > max_page ? max_page : parseInt(current_page) + 1;
+            }
+
+            //if (max_page == 1) go_page = 1;
+
+            $("#current_page").val(go_page);
+            current_page = parseInt($("#current_page").val());  //
+
+            if (go_page > end_page) {
+                pagination();
+            }
+            if (go_page < start_page) {
+                pagination();
+            }
+
+
+            var $tr = jQuery('tbody tr');
+            $tr.hide();
+
+            var temp = go_page - 1;
+            var start = temp * board_limit;
+            var click_num = $(".pagination a").index(this);
+
+            $(".pagination li").removeClass("active");
+            if ($(this).text() != "Previous" && $(this).text() != "Next") {
+                $(".pagination li").eq(click_num).addClass("active");
+            } else {
+                if (go_page % page_limit == 0) {
+                    $(".pagination li").eq(go_page / (go_page / page_limit)).addClass("active");
+                } else {
+                    $(".pagination li").eq(go_page % page_limit).addClass("active");
+                }
+            }
+
+            for (var i = 0; i < board_limit; i++) {
+                $tr.eq(start + i).show();
+            }
+
+
+            // previous버튼 활성화/비활성화
+            if (temp >= 1) {
+                $(".pagination li:first-child").removeClass("disabled");
+
+                pre_btn_css();
+            } else {
+                $("#preA").unbind("touchstart");
+                $("#preA").unbind("touchend");
+
+                $(".pagination li:first-child").addClass("disabled");
+            }
+
+            // next버튼 활성화/비활성화
+            if (start + board_limit >= list_count) {
+                $("#nextA").unbind("touchstart");
+                $("#nextA").unbind("touchend");
+
+                $(".pagination li:last-child").addClass("disabled");
+            } else {
+                $(".pagination li:last-child").removeClass("disabled");
+
+                next_btn_css();
+            }
+
+
+        });
+
+
+    }
+
+    function fn_go_page() {
+        var go_page = $("#max_page").val();
+
+        var board_limit = parseInt($("#board_limit").val());  // 한 페이지에 보여질 게시
+
+        var $tr = jQuery('tbody tr');
+        $tr.hide();
+
+        var temp = go_page - 1;
+        var start = temp * board_limit;
+        var click_num = $(".pagination a").length;
+
+        $(".pagination li").removeClass("active");
+        $(".pagination li:first-child").removeClass("disabled");
+        $(".pagination li:last-child").addClass("disabled");
+        $(".pagination li").eq(click_num - 2).addClass("active");
+
+        for (var i = 0; i < board_limit; i++) {
+            $tr.eq(start + i).show();
+        }
+
+        $("#current_page").val(go_page);
+        current_page = $("#current_page").val();
+    }
+
+    // 페이징 next버튼 css 초기화
+    function next_btn_css() {
+        $("#nextA").bind({
+            touchstart: function () {
+                $(this).css("background-color", "#66615B");
+            },
+            touchend: function () {
+                $(this).css("background-color", "#fff");
+                $(this).css("color", "#66615B");
+            }
+        });
+    }
+
+    // 페이징 previous버튼 css 초기화
+    function pre_btn_css() {
+        $("#preA").bind({
+            touchstart: function () {
+                $(this).css("background-color", "#66615B");
+            },
+            touchend: function () {
+                $(this).css("background-color", "#fff");
+                $(this).css("color", "#66615B");
+            }
+        });
+    }
+
+
+</script>
+
+</html>

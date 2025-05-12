@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\WorkSpace\\PROJECT\\TasCorp\\MOBILE_GMS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8E1F93F4-AA4A-46B0-ABA7-B4CF6C83701C}|mobile_gms\\mobile_gms.csproj|d:\\workspace\\project\\tascorp\\mobile_gms\\mobile_gms\\libs\\database\\dbagent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E1F93F4-AA4A-46B0-ABA7-B4CF6C83701C}|mobile_gms\\mobile_gms.csproj|solutionrelative:mobile_gms\\libs\\database\\dbagent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DbAgent.cs",
+              "DocumentMoniker": "D:\\WorkSpace\\PROJECT\\TasCorp\\MOBILE_GMS\\MOBILE_GMS\\Libs\\Database\\DbAgent.cs",
+              "RelativeDocumentMoniker": "MOBILE_GMS\\Libs\\Database\\DbAgent.cs",
+              "ToolTip": "D:\\WorkSpace\\PROJECT\\TasCorp\\MOBILE_GMS\\MOBILE_GMS\\Libs\\Database\\DbAgent.cs",
+              "RelativeToolTip": "MOBILE_GMS\\Libs\\Database\\DbAgent.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T09:04:46.376Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

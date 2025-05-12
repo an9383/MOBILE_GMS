@@ -1,0 +1,474 @@
+﻿<!-- PDA_StockStatus2_P_test -->
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_GmsLayout.cshtml";
+}
+
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/animate/animate.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/util.css">
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/main.css">
+<!--===============================================================================================-->
+<environment names="Development">
+    <link rel="stylesheet" href="~/css/gms_01.css" />
+    <script src="~/Content/Login_v2/vendor/jquery/jquery-3.2.1.min.js"></script>
+</environment>
+
+<style>
+    th, td {
+        text-align: center
+    }
+
+    select {
+        padding: .8em .5em;
+        font-family: inherit;
+        background: url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg) no-repeat 95% 50%;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: 1px solid #999;
+        border-radius: 0px;
+    }
+
+        select::-ms-expand { /* for IE 11 */
+            display: none;
+        }
+
+    .card-content div {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<div class="content">
+    <div class="container-fluid padding-rl-del">
+        <div class="row margin-rl-del">
+
+            <div class="col-md-12 padding-rl-del">
+                <div class="card margin-bottom-0">
+
+                    <div class="card-header">
+                        <h4 class="card-title">
+                            자재 시험번호별 재고량
+                        </h4>
+                    </div>
+                    <div class="card-content">
+
+                        <fieldset>
+                            <form name="srch_form" id="srch_form">
+                                <input type="hidden" id="gubun2" name="gubun2" value="" />
+                                <input type="hidden" id="gubun" name="gubun" />
+                                <input type="hidden" id="srchTitle" name="srchTitle" />
+
+                                <input type="hidden" id="start_date" name="start_date" />
+                                <input type="hidden" id="end_date" name="end_date" />
+
+                                <!-- 페이징 처리 필요 변수 -->
+                                <input type="hidden" id="list_count" name="list_count" />
+                                <input type="hidden" id="current_page" name="current_page" />
+                                <input type="hidden" id="page_limit" name="page_limit" />
+                                <input type="hidden" id="max_page" name="max_page" />
+                                <input type="hidden" id="start_page" name="start_page" />
+                                <input type="hidden" id="end_page" name="end_page" />
+                                <input type="hidden" id="board_limit" name="board_limit" />
+
+                                <div class="form-group">
+                                    <div class="col-sm-6 col-xs-12">
+                                        <div class="input-group" id="mobile_object">
+                                            <span class="input-group-addon">품목코드</span>
+                                            <input type="text" placeholder="품목코드 검색 입력" class="form-control item_cd" id="srch_cd1" name="srch_cd1" readonly="readonly">
+                                            <span class="input-group-addon"><button class="btn btn-warning btn-xs btn-fill" id="btn_itemFind" type="button" onclick="javascript:fn_findItem('PDA_StockStatus2_P_Test_Win','item_material_p','자재조회')"><span class="btn-label"><i class="ti-search"></i></span></button></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 col-xs-12">
+                                        <div class="col-xs-4" style="padding-top: 8px; padding-left: 0px;">
+                                            <span>시작 날짜 : </span>
+                                        </div>
+                                        <div class="col-xs-8" style="padding-right: 0px;">
+                                            <input type="text" id="srch_start_date" name="srch_start_date" class="form-control date_picker" placeholder="시작 날짜">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-offset-6 col-sm-6 col-xs-12">
+                                        <div class="col-xs-4" style="padding-top: 8px; padding-left: 0px;">
+                                            <span>종료 날짜 : </span>
+                                        </div>
+                                        <div class="col-xs-8" style="padding-right: 0px;">
+                                            <input type="text" id="srch_end_date" name="srch_end_date" class="form-control date_picker" placeholder="종료 날짜">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-xs-12">
+                                        <div class="pull-left">
+                                            <div class="checkbox">
+                                                <input id="srch_check" name="srch_check" type="checkbox" checked="checked">
+                                                <label for="checkbox15">
+                                                    사용 여부
+                                                </label>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="pull-left" style="margin-left: 10px;">
+                                            <select id="obtain_status_S">
+                                                <option value="" selected>전체</option>
+                                                <option value="1">자사구매</option>
+                                                <option value="2">사급원자재</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="pull-right">
+                                            <button id="btn_search" type="button" class="btn btn-info btn-fill" onclick="javascript:fn_search()">검색</button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </form>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="table-responsive table-full-width max-h-315 h-50">
+                                <table id="srchList" class="table table-hover w-s-nr">
+                                    <thead style="background: #4EAE51; color: white;">
+                                    <th>품목코드</th>
+                                    <th>품목명</th>
+                                    <th>단위</th>
+                                    <th>재고량</th>
+                                    <th>조달구분</th>
+                                    <th>시험번호</th>
+                                    <th>입고번호</th>
+                                    <th>입고일자</th>
+                                    <th>입고량</th>
+                                    <th>기타입고량</th>
+                                    <th>출고량</th>
+                                    <th>기타출고량</th>
+                                    <th>유효기간</th>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+
+                        <fieldset style="text-align: center;">
+                            <ul class="pagination">
+
+                            </ul>
+                        </fieldset>
+
+                    </div>
+                </div>  <!-- end card -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+</div>
+
+
+
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/popper.js"></script>
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/js/main.js"></script>
+
+
+
+<script type="text/javascript">
+
+    $(function () {
+        // 날짜 정보 세팅
+        var start_date = last_Month();
+        var end_date = today();
+        $('#srch_start_date').val(start_date);
+        $('#srch_end_date').val(end_date);
+         
+        fn_search();
+
+        if (screen.height > 640) {
+            $("#srchList").parent().removeClass("max-h-315");
+            $("#srchList").parent().addClass("max-h-650");
+        }
+
+
+        // 테이블 resize 핸들러
+        resize_table();
+
+        var checkWeb = fn_mobile_ckeck();
+        if (checkWeb == "web") {
+            $("div.table-responsive.table-full-width").css("overflow-x", "auto");
+            resize_Web_table("srchList", 650);
+        }
+
+        // date_picker
+        $('.date_picker').datetimepicker({
+            format: 'YYYY-MM-DD',    //use this format if you want the 12hours timpiecker with AM/PM toggle
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
+    });
+
+
+    // 웹환경 바코드 스캔 시 동작
+    var keyValue = ""; // 바코드 입력 시 값을 저장할 변수 선언
+    var insertChk = false; // 스캐너 입력으로 fn_callBarcodeInfo함수가 한 번 호출되었을 경우 = 스캐너 입력으로 검색이 한 번 실행된 경우 초기화
+    var insertCount = 1; // 스캐너 입력으로 fn_callBarcodeInfo함수가 한 번 호출되었을 경우 = 스캐너 입력으로 검색이 한 번 실행된 경우 초기화
+    $("body").keypress(function (event) {
+
+        // 입력된 값이 알파벳, 숫자일 경우
+        if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 48 && event.keyCode <= 57)) {
+            keyValue += String.fromCharCode(event.keyCode); // 변수keyValue에 스캔 값 저장
+            insertCount = 0; // fn_callBarcodeInfo함수 호출 조건 입력
+        }
+
+        // 입력된 값이 엔터이고 엔터가 입력되기 전 알파벳 또는 숫자가 입력된 경우
+        if (event.keyCode == 13 && insertCount == 0 && (keyValue.length <= 13 && keyValue.length >= 5)) {
+
+            insertChk = true; // fn_callBarcodeInfo함수 호출 조건 입력
+        }
+
+        // 입력된 바코드 값이 너무 크거나 작으면 초기화
+        if (event.keyCode == 13 && (keyValue.length > 13 || keyValue.length < 5)) {
+            keyValue = "";
+            insertChk = false; // fn_callBarcodeInfo함수 호출 조건 초기화
+            insertCount = 1; // fn_callBarcodeInfo함수 호출 조건 초기화
+        }
+
+        // 조건 만족 시 fn_callBarcodeInfo함수 호출
+        if (insertChk && insertCount == 0) {
+            var keyValue_temp = keyValue; // keyValue변수 초기화를 위해 temp변수로 이동
+            keyValue = "";  // 변수keyValue 초기화
+            insertChk = false; // fn_callBarcodeInfo함수 호출 조건 초기화
+            insertCount = 1; // fn_callBarcodeInfo함수 호출 조건 초기화
+
+            fn_callBarcodeInfo({ 'barcode': keyValue_temp.replaceAll("\0", "") });
+        }
+
+    })
+
+    /*
+ * 바코드관련 상세 정보 호출
+ */
+    function fn_callBarcodeInfo(params) {
+        // 특수문자 제거
+        if (typeof params.barcode == "undefined" || params.barcode == null || params.barcode == "" || params.barcode == "null") {
+
+            params.barcode = params.barcode.replaceAll("\0", "");
+        }
+
+        // 스캔한 바코드 셋팅
+        $("#srch_cd1").val(params.barcode);
+
+
+        // 테이블 초기화
+        $('#srchList > tbody').empty();
+
+        var controllerName = "PackSelect";
+        var actionName = "SelectPack";
+
+
+        var callUrl = "/" + controllerName + "/" + actionName;
+
+        var request = JSON.stringify(params);
+
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: "application/json; charset=UTF-8",
+            success: function (data) {
+
+                if (data.item_cd == null) {
+                    // 스캔한 바코드가 팩, 지함이 아닐 경우 null 대신 들어갈 더미 키워드 입력
+                    $("#srch_cd1").val("ZZ999-999");
+                } else {
+                    $("#srch_cd1").val(data.item_cd);
+                }
+                fn_search();
+
+            }, beforeSend: function () {
+                fn_loading('show');
+            }, complete: function () {
+                fn_loading('hide');
+            }, error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+
+    }
+
+
+    /*
+     * 데이터 검색
+     */
+    function fn_search() {
+
+        $('#srchList > tbody').empty();
+        var srch_cd = $("#srch_cd1").val(); // 품목 코드
+        var srch_check = '';      // 사용 여부
+        var srch_start_date = $('#srch_start_date').val(); // 기간_시작일
+        var srch_end_date = $('#srch_end_date').val();   // 기간_종료일
+        var obtain_status_S = $('#obtain_status_S option:selected').val(); // 상태
+
+
+        // 사용여부 확인
+        if ($('#srch_check').is(":checked")) {
+            srch_check = 'Y';
+        }
+
+        var params = {
+
+            'start_date': srch_start_date,
+            'end_date': srch_end_date,
+            'item': srch_cd,
+            's_gubun': '2', // 원료 3 , 자재 2
+            's_gubun2': 'notall',
+            'obtain_status_S': obtain_status_S,
+            'check': srch_check
+        };
+
+        var callUrl = "/PDA_StockStatus2_P_Test/StockStatus_Search";
+        var request = JSON.stringify(params);
+
+
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                $("#list_count").val(data.length);
+                $("#current_page").val(1);
+
+                if (data.length <= 0) {
+
+                    swal({
+                        title: '데이터가 없습니다.',
+
+                        type: 'error'
+                    });
+
+                    $("#list_count").val(0);
+                    $("#current_page").val(0);
+                } else {
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        var test_no = data[i].test_no;
+                        var test_date = data[i].test_date;
+                        var receipt_no = data[i].receipt_no;
+                        var receipt_id = data[i].receipt_id;
+                        var item_cd = data[i].item_cd;
+                        var item_nm = data[i].item_nm;
+                        var item_unit = data[i].item_unit;
+                        var receipt_qty = Math.floor(data[i].receipt_qty);
+                        var delivery_qty = Math.floor(data[i].delivery_qty);
+                        var receipt_remain_qty = Math.floor(data[i].receipt_remain_qty);
+                        var receipt_disuse_qty = data[i].receipt_disuse_qty;
+                        var receipt_bad_qty = data[i].receipt_bad_qty;
+                        var obtain_status = data[i].obtain_status;
+                        var receipt_etc_qty = Math.floor(data[i].receipt_etc_qty);
+                        var delivery_etc_qty = Math.floor(data[i].delivery_etc_qty);
+                        var valid_period = data[i].valid_period;
+
+                        var trHtml = '<tr>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + item_cd + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 50%;text-align: center">' + item_nm + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + item_unit + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + receipt_remain_qty + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + obtain_status + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + test_no + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + receipt_no + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + test_date + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + receipt_qty + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + receipt_etc_qty + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + delivery_qty + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + delivery_etc_qty + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + valid_period + '</td>';
+                        trHtml += '</tr>';
+
+                        $('#srchList > tbody').append(trHtml);
+                    }
+
+                }
+                // 페이징 처리
+                pagination();
+
+                // 테이블 resize
+                resize_table();
+
+            }, beforeSend: function () {
+                fn_loading('show');
+            }, complete: function () {
+                fn_loading('hide');
+            }, error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+    }
+
+    // 테이블 resize 핸들러
+    function resize_table() {
+        var count = $("#srchList tbody tr").length;
+        var newHeight = 48 + (count * 45);
+
+        $("#srchList").parent().removeClass("h-50");
+        $("#srchList").parent().height(newHeight);
+    }
+
+
+    /* 오늘 날짜를 문자열로 반환 */
+    function today() {
+        var d = new Date()
+        return getDateStr(d)
+    }
+
+    // 한 달 전
+    function last_Month() {
+
+        var d = new Date()
+        var monthOfYear = d.getMonth()
+        d.setMonth(monthOfYear - 1)
+
+        return getDateStr(d);
+    }
+
+    /* 날짜 객체 받아서 문자열로 리턴하는 함수 */
+    function getDateStr(myDate) {
+
+        var tempMonth = (myDate.getMonth() + 1) > 9 ? (myDate.getMonth() + 1) : '0' + (myDate.getMonth() + 1);
+        var tempDate = myDate.getDate() > 9 ? myDate.getDate() : '0' + myDate.getDate();
+
+        //return (myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate())
+        return (myDate.getFullYear() + '-' + tempMonth + '-' + tempDate);
+    }
+
+
+
+</script>

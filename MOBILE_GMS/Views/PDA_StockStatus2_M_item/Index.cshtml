@@ -1,0 +1,340 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_GmsLayout.cshtml";
+}
+
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/animate/animate.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/util.css">
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/main.css">
+<!--===============================================================================================-->
+
+<environment names="Development">
+    <link rel="stylesheet" href="~/css/gms_01.css" />
+    <script src="~/Content/Login_v2/vendor/jquery/jquery-3.2.1.min.js"></script>
+</environment>
+
+<style>
+    th, td {
+        text-align: center;
+    }
+
+</style>
+
+<div class="content">
+    <div class="container-fluid padding-rl-del">
+        <div class="row margin-rl-del">
+
+            <div class="col-md-12 padding-rl-del">
+                <div class="card margin-bottom-0">
+
+                    <div class="card-header">
+                        <h4 class="card-title">
+                            원료 품목별 재고량
+                        </h4>
+                    </div>
+                    <div class="card-content">
+
+                        <fieldset>
+                            <form name="srch_form" id="srch_form">
+                                <input type="hidden" id="gubun2" name="gubun2" value="" />
+                                <input type="hidden" id="gubun" name="gubun" />
+                                <input type="hidden" id="srchTitle" name="srchTitle" />
+
+                                <!-- 페이징 처리 필요 변수 -->
+                                <input type="hidden" id="list_count" name="list_count" />
+                                <input type="hidden" id="current_page" name="current_page" />
+                                <input type="hidden" id="page_limit" name="page_limit" />
+                                <input type="hidden" id="max_page" name="max_page" />
+                                <input type="hidden" id="start_page" name="start_page" />
+                                <input type="hidden" id="end_page" name="end_page" />
+                                <input type="hidden" id="board_limit" name="board_limit" />
+
+                                <div class="form-group">
+                                    <div class="col-sm-5">
+                                        <div class="input-group" id="mobile_object">
+                                            <span class="input-group-addon">품목코드</span>
+                                            <input type="text" placeholder="품목코드 검색 입력" class="form-control item_cd" id="srch_cd1" name="srch_cd1" readonly="readonly">
+                                            <span class="input-group-addon"><button class="btn btn-warning btn-xs btn-fill" id="btn_itemFind" type="button" onclick="javascript:fn_findItem('PDA_StockStatus2_M_item_Win','item_material','원료조회')"><span class="btn-label"><i class="ti-search"></i></span></button></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group pull-left" style="padding-left: 5%;">
+                                        <div class="checkbox">
+                                            <input id="srch_check" name="srch_check" type="checkbox" checked="checked">
+                                            <label for="checkbox15">
+                                                사용 여부
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <button id="btn_search" type="button" class="btn btn-info btn-fill pull-right" onclick="javascript:fn_search()">검색</button>
+
+                                </div>
+                            </form>
+                        </fieldset>
+
+
+                        <fieldset>
+                            <div class="table-responsive table-full-width max-h-315 h-50">
+                                <table id="srchList" class="table table-hover w-s-nr">
+                                    <thead style="background: #4EAE51; color: white;">
+                                        <th>코드</th>
+                                        <th>품목명</th>
+                                        <th>단위</th>
+                                        <th>재고량</th>
+                                        <th>입고예정수량</th>
+                                        <th>출고예정량</th>
+                                        <th>가용재고량</th>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+
+                        <fieldset style="text-align: center;">
+                            <ul class="pagination">
+
+                            </ul>
+                        </fieldset>
+
+                    </div>
+                </div>  <!-- end card -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+</div>
+
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/popper.js"></script>
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/js/main.js"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+        fn_search();
+
+        if (screen.height > 640) {
+            $("#srchList").parent().removeClass("max-h-315");
+            $("#srchList").parent().addClass("max-h-720");
+        }
+
+
+        // 테이블 resize 핸들러
+        resize_table();
+
+        var checkWeb = fn_mobile_ckeck();        
+        if (checkWeb == "web") {
+            $("div.table-responsive.table-full-width").css("overflow-x", "auto");
+            resize_Web_table("srchList", 720);
+        }
+    })
+
+
+    // 웹환경 바코드 스캔 시 동작
+    var keyValue = ""; // 바코드 입력 시 값을 저장할 변수 선언
+    var insertChk = false; // 스캐너 입력으로 fn_callBarcodeInfo함수가 한 번 호출되었을 경우 = 스캐너 입력으로 검색이 한 번 실행된 경우 초기화
+    var insertCount = 1; // 스캐너 입력으로 fn_callBarcodeInfo함수가 한 번 호출되었을 경우 = 스캐너 입력으로 검색이 한 번 실행된 경우 초기화
+    $("body").keypress(function (event) {
+
+        // 입력된 값이 알파벳, 숫자일 경우
+        if ((event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 48 && event.keyCode <= 57)) {
+            keyValue += String.fromCharCode(event.keyCode); // 변수keyValue에 스캔 값 저장
+            insertCount = 0; // fn_callBarcodeInfo함수 호출 조건 입력
+        }
+
+        // 입력된 값이 엔터이고 엔터가 입력되기 전 알파벳 또는 숫자가 입력된 경우
+        if (event.keyCode == 13 && insertCount == 0 && (keyValue.length <= 13 && keyValue.length >= 5)) {
+
+            insertChk = true; // fn_callBarcodeInfo함수 호출 조건 입력
+        }
+
+        // 입력된 바코드 값이 너무 크거나 작으면 초기화
+        if (event.keyCode == 13 && (keyValue.length > 13 || keyValue.length < 5)) {
+            keyValue = "";
+            insertChk = false; // fn_callBarcodeInfo함수 호출 조건 초기화
+            insertCount = 1; // fn_callBarcodeInfo함수 호출 조건 초기화
+        }
+
+        // 조건 만족 시 fn_callBarcodeInfo함수 호출
+        if (insertChk && insertCount == 0) {
+            var keyValue_temp = keyValue; // keyValue변수 초기화를 위해 temp변수로 이동
+            keyValue = "";  // 변수keyValue 초기화
+            insertChk = false; // fn_callBarcodeInfo함수 호출 조건 초기화
+            insertCount = 1; // fn_callBarcodeInfo함수 호출 조건 초기화
+
+            fn_callBarcodeInfo({ 'barcode': keyValue_temp.replaceAll("\0", "") });
+        }
+
+    })
+
+    /*
+ * 바코드관련 상세 정보 호출
+ */
+    function fn_callBarcodeInfo(params) {
+        // 특수문자 제거
+        if (typeof params.barcode == "undefined" || params.barcode == null || params.barcode == "" || params.barcode == "null") {
+
+            params.barcode = params.barcode.replaceAll("\0", "");
+        }
+
+        // 스캔한 바코드 셋팅
+        $("#srch_cd1").val(params.barcode);
+
+
+        // 테이블 초기화
+        $('#srchList > tbody').empty();
+
+        var controllerName = "PackSelect";
+        var actionName = "SelectPack";
+
+
+        var callUrl = "/" + controllerName + "/" + actionName;
+
+        var request = JSON.stringify(params);
+
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: "application/json; charset=UTF-8",
+            success: function (data) {
+                if (data.item_cd == null) {
+                    // 스캔한 바코드가 팩, 지함이 아닐 경우 null 대신 들어갈 더미 키워드 입력
+                    $("#srch_cd1").val("ZZ999-999");
+                } else {
+                    $("#srch_cd1").val(data.item_cd);
+                }
+                fn_search();
+
+            }, beforeSend: function () {
+                fn_loading('show');
+            }, complete: function () {
+                fn_loading('hide');
+            }, error: function (data) {
+                alert('error' + data.status);
+            }      
+        });
+
+    }
+
+
+    /*
+     * 데이터 검색
+     */
+    function fn_search() {
+        $('#srchList > tbody').empty();
+        var srch_cd = $('#srch_cd1').val();
+        var srch_check = '';
+        // 사용여부 확인
+        if ($('#srch_check').is(":checked")) {
+            srch_check = 'Y';
+        }
+
+        var params = {
+            'item_cd': srch_cd,
+            's_gubun': '3', // 원료 3 , 자재 2
+            's_gubun2': 'notall',
+            'check': srch_check
+        };
+
+        var callUrl = "/PDA_StockStatus2_M_item/StockStatus_Search";
+        var request = JSON.stringify(params);
+
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                $("#list_count").val(data.length);
+                $("#current_page").val(1);
+
+                if (data.length <= 0) {
+
+                    swal({
+                        title: '데이터가 없습니다.',
+                        
+                        type: 'error'
+                    });
+
+                    $("#list_count").val(0);
+                    $("#current_page").val(0);
+                } else {
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        var item_cd = data[i].item_cd;
+                        var item_nm = data[i].item_nm;
+                        var item_unit = data[i].item_unit;
+                        var receipt_ye_qty = Math.floor(data[i].receipt_ye_qty);
+                        var receipt_remain_qty = Math.floor(data[i].receipt_remain_qty);
+                        var receipt_reserve_qty = Math.floor(data[i].receipt_reserve_qty);
+                        var available_inventory = Math.floor(data[i].available_inventory);
+                        var check = data[i].check;
+
+                        var trHtml = '<tr>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + item_cd + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 50%;text-align: center">' + item_nm + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + item_unit + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + receipt_remain_qty + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + receipt_ye_qty + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + receipt_reserve_qty + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + available_inventory + '</td>';
+                        
+                        trHtml += '</tr>';
+
+                        $('#srchList > tbody').append(trHtml);
+                    }
+
+                }
+                // 테이블 resize
+                resize_table();
+
+                // 페이징 처리
+                pagination();
+
+            }, beforeSend: function () {
+                fn_loading('show');
+            }, complete: function () {
+                fn_loading('hide');
+            }, error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+    }
+
+
+
+    // 테이블 resize 핸들러
+    function resize_table() {
+        var count = $("#srchList tbody tr").length;
+        var newHeight = 48 + (count * 45);
+
+        $("#srchList").parent().removeClass("h-50");
+        $("#srchList").parent().height(newHeight);
+    }
+
+</script>

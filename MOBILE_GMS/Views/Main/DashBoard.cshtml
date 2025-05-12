@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "Main";
+    Layout = "~/Views/Shared/_GmsLayout.cshtml";
+}
+
+@{string dbgcolor = "";}
+
+
+
+<div class="content">
+    <div class="container-fluid">
+        @foreach (var smenu in ViewData["MenuSubList"] as List<MenuModel>)
+        {
+
+            if (smenu.module_cd.Equals("P10000000"))
+            {
+                dbgcolor = "";
+            }
+            else if (smenu.module_cd.Equals("P20000000"))
+            {
+                dbgcolor = "green";
+            }
+            else if (smenu.module_cd.Equals("P30000000"))
+            {
+                dbgcolor = "blue";
+            }
+            else if (smenu.module_cd.Equals("P40000000"))
+            {
+                dbgcolor = "brown";
+            }
+            else if (smenu.module_cd.Equals("P60000000"))
+            {
+                dbgcolor = "orange";
+            }
+
+
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card" data-background-color="@dbgcolor">
+
+                        <div class="card-content" onclick="javascript: fn_subMenu('@smenu.source_cd','@smenu.module_cd');">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div class="icon-big icon-warning text-center">
+                                        <i class='@smenu.appIcon'></i>
+                                    </div>
+                                </div>
+                                <div class="col-xs-8">
+                                    <div class="numbers">
+                                        @smenu.form_nm<!--[@smenu.source_cd]-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    /*
+     * 바코드관련 상세 정보 호출
+     */
+    function fn_callBarcodeInfo(params) {
+
+        // 컨트롤 / 액션
+        var controllerName = '';
+        var actionName = '';
+
+        // 스캔한 바코드 셋팅
+        var barcode_gubun = fn_getBarcodePrefix(params.barcode);
+
+        // 구역 바코드 인 경우
+        if (barcode_gubun === 'Z') {
+            controllerName = 'ZoneSelect';
+            actionName = 'Index';
+
+            fn_locationByGet(controllerName, actionName, params);
+            return;
+        }
+        // 창고 바코드 인 경우
+        else if (barcode_gubun === 'W') {
+            controllerName = 'WorkRoomSelect';
+            actionName = 'Index';
+
+            fn_locationByGet(controllerName, actionName, params);
+            return;
+        }
+    }
+
+</script>

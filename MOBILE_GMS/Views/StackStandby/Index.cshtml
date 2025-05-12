@@ -1,0 +1,451 @@
+﻿
+@{
+    ViewData["Title"] = "PackSelect";
+    Layout = "~/Views/Shared/_GmsLayout.cshtml";
+}
+
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/animate/animate.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/util.css">
+<link rel="stylesheet" type="text/css" href="~/Content/Table_Fixed_Header/css/main.css">
+<!--===============================================================================================-->
+<environment names="Development">
+    <link rel="stylesheet" href="~/css/gms_01.css" />
+    <script src="~/Content/Login_v2/vendor/jquery/jquery-3.2.1.min.js"></script>
+</environment>
+
+<style>
+    th, td {
+        text-align: center;
+    }
+</style>
+
+
+<div class="content">
+    <div class="container-fluid padding-rl-del">
+        <div class="row margin-rl-del">
+
+            <div class="col-md-12 padding-rl-del">
+                <div class="card margin-bottom-0">
+
+                    <div class="card-header">
+                        <h4 class="card-title">
+                            시험 완료 품목 이동대상
+                        </h4>
+                    </div>
+                    <div class="card-content">
+
+                        <fieldset>
+                            <form name="srch_form" id="srch_form">
+                                <input type="hidden" id="gubun2" name="gubun2" value="" />
+                                <input type="hidden" id="gubun" name="gubun" />
+                                <input type="hidden" id="srchTitle" name="srchTitle" />
+
+                                <!-- 페이징 처리 필요 변수 -->
+                                <input type="hidden" id="list_count" name="list_count" />
+                                <input type="hidden" id="current_page" name="current_page" />
+                                <input type="hidden" id="page_limit" name="page_limit" />
+                                <input type="hidden" id="max_page" name="max_page" />
+                                <input type="hidden" id="start_page" name="start_page" />
+                                <input type="hidden" id="end_page" name="end_page" />
+                                <input type="hidden" id="board_limit" name="board_limit" />
+
+                                <div class="form-group">
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">품목코드</span>
+                                            <input type="text" placeholder="품목코드 검색 입력" class="form-control" id="srch_cd1" name="srch_cd1" readonly="readonly">
+                                            <span class="input-group-addon"><button class="btn btn-warning btn-xs btn-fill" id="btn_itemFind" type="button" onclick="javascript:fn_findItem('StackStandby_Win','item_standard_material','원자재조회')"><span class="btn-label"><i class="ti-search"></i></span></button></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">품목명</span>
+                                            <input type="text" placeholder="품목명 검색 입력" class="form-control" id="srch_nm1" name="srch_nm1" readonly="readonly">
+                                            <span class="input-group-addon"><button class="btn btn-success btn-xs" id="btn_int" type="button" onclick="javascript:fn_init('srch_nm1');">초기화</button></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </fieldset>
+
+                        <!--적치 영역   style="display:none"-->
+                        <fieldset id="div_area1" style="display:none">
+                            <div class="form-group" id="div_area">
+                                <div class="col-sm-12">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">적치 장소</span>
+                                        <input type="text" placeholder="적치 장소 코드" class="form-control" id="area_cd" name="area_cd" readonly="readonly">
+                                        <span class="input-group-addon"><button class="btn btn-success btn-xs" id="btn_int" type="button" onclick="javascript:fn_init('area');">초기화</button></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="form-group has-success">
+                                <div class="col-sm-12">
+                                    <button id="btn_search" type="button" class="btn btn-primary btn-sm pull-right" onclick="javascript:fn_search()" style="margin-right:3px;"><span class="btn-label"><i class="ti-search"></i></span> 검 색</button>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="form-group has-success">
+                                <hr />
+                            </div>
+                        </fieldset>
+
+                        <!--팔레트 영역-->
+                        <fieldset id="div_pallet1" style="display:none">
+                            <div class="form-group has-success" id="div_area">
+                                <label class="col-sm-3 control-label" style="margin-bottom: auto; font-size : 18px" id="locArea">적치 팔레트 코드</label>
+                                <div class="col-sm-9">
+                                    <div class="row">
+
+                                        <div class="col-md-12">
+                                            <div class="input-group mb-12">
+                                                <input type="text" id="pallet_cd" name="pallet_cd" class="input-css" placeholder="적치 팔레트 코드" readonly="readonly">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn btn-primary btn-lg" id="btn_int" type="button" style="height:40px;" onclick="javascript:fn_init('pallet');">초기화</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset id="div_pallet2" style="display:none">
+                            <div class="form-group has-success">
+                                <hr />
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <!--
+                            <button id="btn_stack" type="button" class="btn btn-default btn-lg pull-right" disabled="disabled" onclick="javascript:fn_packStack()">구 역 적 치</button>
+                                -->
+
+                            <div class="table-responsive table-full-width max-h-315 h-50">
+                                <table id="srchList" class="table table-hover w-s-nr">
+                                    <thead style="background: #4EAE51; color: white;">
+                                    <th>품목명</th>
+                                    <th>시험번호</th>
+                                    <th>팩순서</th>
+                                    <th>시험상태</th>
+                                    <th>바코드</th>
+                                    <th>창고</th>
+                                    <th>구역</th>
+                                    <th>셀</th>
+                                    <th>재고</th>
+                                    <th>작업</th>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+
+                        <fieldset style="text-align: center;">
+                            <ul class="pagination">
+
+                            </ul>
+                        </fieldset>
+
+                    </div>
+                </div>  <!-- end card -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+
+</div>
+
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/popper.js"></script>
+<script src="~/Content/Table_Fixed_Header/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/Content/Table_Fixed_Header/js/main.js"></script>
+
+
+<script type="text/javascript">
+
+    $(function () {
+
+        // web 브라우저로 접속한 경우 readonly 해제
+        if (fn_mobile_ckeck() === 'web') {
+
+            $('#srch_cd1').prop('readonly', false);
+            $('#srch_nm1').prop('readonly', false);
+            
+        }
+
+        fn_search();
+
+        if (screen.height > 640) {
+            $("#srchList").parent().removeClass("max-h-315");
+            $("#srchList").parent().addClass("max-h-650");
+        }
+
+        // 테이블 resize 핸들러
+        resize_table();
+
+        var checkWeb = fn_mobile_ckeck();
+        if (checkWeb == "web") {
+            $("div.table-responsive.table-full-width").css("overflow-x", "auto");
+            resize_Web_table("srchList", 650);
+        }
+    })
+
+
+    /*
+     * 바코드 넘어온 경우
+     */
+    function fn_callBarcodeInfo(params) {
+
+        if ($("#srchList > tbody tr").length <= 0) {
+
+            alert("먼저 데이터를 조회해주세요.");
+
+            //swal({
+            //    title: '먼저 데이터를 조회해주세요.',
+            //    //text: '적치할 위치의 바코드정보를 스캔해주세요.',
+            //    type: 'error'
+            //    //timer: 1000
+            //});
+
+            return;
+        }
+
+        var preFix = fn_getBarcodePrefix(params.barcode);   //.substr(0, 1);
+        if (preFix == "P") {
+            var table = $("#srchList > tbody");
+            var matchBarcode = '';
+            var barcodeMatchCnt = 0;     // 바코드 스캔한 정보가 해당 table에 없는 갯수
+            table.find('tr').each(function (key, val) {
+
+                var $tds = $(this).find('td');
+                var _barcode = $tds.eq(4).text();
+                if (_barcode == params.barcode.replaceAll("\0", "")) {   // 매칭,
+                    barcodeMatchCnt++;
+                    matchBarcode = _barcode;
+                    return false; // (== break 동일)
+                }
+            });
+
+            if (barcodeMatchCnt == 0) {
+
+                alert("일치하는 팩 바코드 정보가 없습니다.");
+
+                //swal({
+                //    title: '일치하는 팩 바코드 정보가 없습니다.',
+                //    //text: '적치할 위치의 바코드정보를 스캔해주세요.',
+                //    type: 'error'
+                //    //timer: 1000
+                //});
+                return;
+            } else {
+                fn_choice(matchBarcode);
+            }
+
+            //alert("[일치 수:" + barcodeMatchCnt+"] ::> "+matchBarcode);
+
+
+        } else if (preFix == "G") {  //잘못된 팩
+
+            alert("잘못된 팩 바코드 정보입니다.");
+
+            //swal({
+            //    title: '잘못된 팩 바코드 정보입니다.',
+            //    //text: '적치할 위치의 바코드정보를 스캔해주세요.',
+            //    type: 'error'
+            //    //timer: 1000
+            //}
+            //);
+            return;
+
+
+        } else if (preFix == "L") {     // 팔렛트 정보 로 전송 ( 팩 바코드 + 파레트 바코드 선택된 경우.)
+
+            $("#div_pallet1").show("fast");
+            $("#div_pallet2").show("fast");
+            $("#pallet_cd").val(params.barcode);
+            fn_init('area');
+            $("#gubun2").val('L');
+
+        } else if ((preFix == "W") || (preFix == "Z") || (preFix == "C")) {     // 장소 바코드라면.
+            $("#div_area1").show("fast");
+            //$("#div_area2").show("fast");
+            $("#area_cd").val(params.barcode);
+            fn_init('pallet');
+            $("#gubun2").val('A');
+        }
+
+    }
+
+    /*
+     * 장소 필드 초기화
+     */
+    function fn_init(mode) {
+
+        $("#gubun2").val('');
+
+        if (mode == 'area') {       // 적치 장소
+
+            $("#div_area1").hide("fast");
+            //$("#div_area2").hide("fast");
+            $("#area_cd").val('');
+
+        } else if (mode == 'pallet') {  // 팔레트 장소
+
+            $("#div_pallet1").hide("fast");
+            $("#div_pallet2").hide("fast");
+            $("#pallet_cd").val('');
+        } else if (mode == 'srch_nm1') {
+            $("#srch_cd1").val('');
+            $("#srch_nm1").val('');
+        }
+    }
+
+
+    /*
+     * 데이터 검색
+     */
+    function fn_search() {
+        //
+        // 폼 초기화
+        //$("#srch_form").find('input[type="text"], textarea, select').val('');
+        //$("#srch_form").find('input[type="checkbox"]').prop('checked', false);
+        $('#srchList > tbody').empty();
+        var srch_cd = $("#srch_cd1").val();
+        var srch_nm = $("#srch_nm1").val();
+
+        // 초기화
+        var params = {
+            'item_cd': srch_cd, 'item_nm': srch_nm, 'gubun': 'Select', 'standby_gubun': 'TEST'
+        };
+
+        var callUrl = "/StackStandby/StackStandbySearch";
+        var request = JSON.stringify(params);
+        $.ajax({
+            method: "POST",
+            data: request,
+            url: callUrl,
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                $("#current_page").val(1);
+                $("#list_count").val(data.length);
+
+                if (data.length <= 0) {
+
+                    swal({
+                        title: '데이터가 없습니다.',
+                        //text: '적치할 위치의 바코드정보를 스캔해주세요.',
+                        type: 'error'
+                        //timer: 1000
+                    }
+                    );
+
+
+                    //var trHtml = '<tr><td class="cell100" style="width : 100%;text-align: center" colspan="10">No Data</td></tr>';
+                    //$('#srchList > tbody').append(trHtml);
+
+                } else {
+                    for (var i = 0; i < data.length; i++) {
+
+                        var item_nm = data[i].item_nm;
+                        var test_no = data[i].test_no;
+                        var receipt_pack_seq = data[i].receipt_pack_seq;
+                        var receipt_status = data[i].receipt_status;
+                        var receipt_pack_barcode = data[i].receipt_pack_barcode.replaceAll("\0", "");
+                        var workroom_nm = data[i].workroom_nm;
+                        var zone_nm = data[i].zone_nm;
+                        var cell_nm = data[i].cell_nm;
+                        var remain_qty = data[i].remain_qty;
+
+                        var trHtml = '<tr>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + item_nm + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + test_no + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + receipt_pack_seq + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + receipt_status + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + receipt_pack_barcode + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + workroom_nm + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + zone_nm + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + cell_nm + '</td>';
+                        trHtml += ' <td class="cell100" style="width : 10%;text-align: center">' + remain_qty + '</td>';
+
+                        trHtml += ' <td class="cell100" style="width : 5%;text-align: center"><button type="button" class="btn btn-primary btn-xs" onclick="javascript:fn_choice(\'' + receipt_pack_barcode + '\')">구역적치</button></td>';
+                        trHtml += '</tr>';
+
+                        $('#srchList > tbody').append(trHtml);
+                    }
+
+                }
+                // 테이블 resize
+                resize_table();
+
+                // 페이징 처리
+                pagination();
+
+            }, beforeSend: function () {
+                fn_loading('show');
+            }, complete: function () {
+                fn_loading('hide');
+            }, error: function (data) {
+                alert('error' + data.status);
+            }
+        });
+    }
+
+    /*
+     * 팩/지함별 적치 화면으로 이동.
+     */
+    function fn_choice(barcode) {
+
+        var params = { 'barcode': barcode.replaceAll("\0", "") }
+
+        var pallet_barcode = $.trim($("#pallet_cd").val());
+        var area_barcode = $.trim($("#area_cd").val());
+        pallet_barcode = pallet_barcode.replaceAll("\0", "");
+        area_barcode = area_barcode.replaceAll("\0", "");
+
+        var controllerName = '';
+
+        var gubun2 = $("#gubun2").val();
+
+        if (gubun2 == "L") {        // 파레트 인 경우
+            controllerName = 'MaterialPalletStack';
+            params.area_barcode = pallet_barcode;
+        } else {
+            controllerName = 'PackStack';
+            params.area_barcode = area_barcode;
+        }
+
+        fn_locationByGet(controllerName, 'Index', params);
+    }
+
+    function resize_table() {
+        var count = $("#srchList tbody tr").length;
+        var newHeight = 48 + (count * 45);
+
+        $("#srchList").parent().removeClass("h-50");
+        $("#srchList").parent().height(newHeight);
+    }
+
+
+</script>

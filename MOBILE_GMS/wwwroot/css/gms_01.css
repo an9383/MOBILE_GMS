@@ -1,0 +1,118 @@
+﻿
+.selTrColor {
+    background-color: #9DCFFF
+}
+
+.input-css {
+    background-color: #F3F2EE;
+    border: 1px solid #e8e7e3;
+    border-radius: 4px;
+    color: #66615b;
+    font-size: 14px;
+    padding: 7px 18px;
+    height: 40px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    width: 100%;
+}
+
+    .input-css:focus {
+        border: 1px solid #e8e7e3;
+        background-color: #FFFFFF;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        outline: 0 !important;
+    }
+
+.btn-gms {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .5rem .75rem;
+    font-size: 2rem;
+    line-height: 1.25;
+    border-radius: .25rem;
+    transition: all .15s ease-in-out;
+    margin-left: 10px;
+    width: 100px;
+}
+
+.btn-gms-info {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+    .btn-gms-info:hover {
+        color: #fff;
+        background-color: #138496;
+        border-color: #117a8b;
+    }
+
+
+    /*여백제거용 Style*/
+
+    /*padding 관련*/
+    .layout-content-padding {
+        padding: 9px 5px !important;
+    }
+
+    .padding-rl-del {
+        padding-right: 0px !important;
+        padding-left: 0px !important;
+    }
+
+
+    /*margin 관련*/
+    .margin-rl-del {
+        margin-right: 0px !important;
+        margin-left: 0px !important;
+    }
+
+    .margin-bottom-5 {
+        margin-bottom: 5px !important;
+    }
+
+    .margin-bottom-0 {
+        margin-bottom: 0px !important;
+    }
+
+
+    /* height 관련*/
+    .h-50 {
+        height: 50px !important;
+    }
+
+    .max-h-300 {
+        max-height: 300px !important;
+    }
+
+    .max-h-650 {
+        max-height: 650px !important;
+    }
+
+    .max-h-720 {
+        max-height: 720px !important;
+    }
+
+    
+    /* table white-space 관련*/
+    .w-s-nr {
+        white-space: nowrap;
+    }
+
+/*.btn-info {
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        font-size: 18px;
+        margin-left: 10px;
+        width: 20%;
+    }*/
